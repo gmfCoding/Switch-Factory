@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class AssetInfo : ScriptableObject
 {
-    public new string name;
-    public string description;
+    [Header("Asset Info:")]
+    [SerializeField]
+    private new string name;
+    [SerializeField]
+    [TextArea]
+    private string description;
 
+    public string Name { get => name; }
+    public string Description { get => description; }
 }

@@ -1,20 +1,25 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Search;
 using UnityEngine;
+
+public class ConveyorItem
+{
+    public Item item;
+    public float pos;
+    public Vector2Int prev_dir;
+}
 
 public class Conveyor : TileEntity, IItemTransport, ITickable
 {
-    public Vector2Int direction;
-    const float speed = 0.014f;
-    const int capacity = 8;
+    const float speed = 0.028f;
+    const int capacity = 1;
 
-    public Dictionary<Item, float> items = new Dictionary<Item, float>();
-    public List<Item> queue = new List<Item>();
+    //public Dictionary<Item, float> items = new Dictionary<Item, float>();
+    public List<ConveyorItem> queue = new List<ConveyorItem>();
 
-    public Conveyor()
+    public Conveyor(TileInfo info) : base(info)
     {
+        Debug.Log("Created new Conveyor");
         ConveyorVis.instance.conveyors.Add(this);
     }
 
@@ -22,30 +27,30 @@ public class Conveyor : TileEntity, IItemTransport, ITickable
     {
         int dequeue = 0;
         int stop = capacity;
-        foreach (var key in queue)
+        for (int i = 0; i < queue.Count; i++)
         {
-            if (items[key] > 1.0f)
+            if (queue[i].pos > 1.0f)
                 dequeue++;
-            if (items[key] <= (1.0 / capacity * stop))
-                items[key] += speed;
+            if (queue[i].pos <= (1.0 / capacity * stop))
+                queue[i].pos += speed;
             stop--;
         }
-        TileEntity neighbour = Game.instance.world.GetTileEntity(pos + direction);
+        TileEntity neighbour = Game.instance.world.GetTileEntity(pos + Direction);
         if (neighbour is IItemTransport target)
         {
             if (!target.CanAcceptFrom(this))
                 return;
             for (int i = 0; i < dequeue; i++)
             {
-                target.Give(queue[i], this, out int taken);
-                if (taken >= queue[i].amount)
+                target.Give(queue[i].item, this, out int taken);
+                if (taken >= queue[i].item.amount)
                 {
                     var rem = queue.ElementAt(0);
                     queue.Remove(rem);
-                    items.Remove(rem);
+                    queue.Remove(rem);
                 }
                 else
-                    queue[i].amount -= taken;
+                    queue[i].item.amount -= taken;
             }
         }
     }
@@ -57,43 +62,53 @@ public class Conveyor : TileEntity, IItemTransport, ITickable
 
     public Item Take()
     {
-        Item item = null;
-        foreach (var key in queue)
+        ConveyorItem item = null;
+        for (int i = 0; i < queue.Count; i++)
         {
-            if (items[key] < 0.8f)
-                item = key;
+            if (queue[i].pos < 0.8f)
+                item = queue[i];
             else
                 break;
         }
         if (item == null)
             return null;
         queue.Remove(item);
-        items.Remove(item);
-        return item;
+        queue.Remove(item);
+        return item.item;
     }
 
-    public void Give(Item item, IItemTransport from, out int taken)
+    public void Give(Item given, IItemTransport from, out int taken)
     {
         taken = 0;
         if (queue.Count >= capacity)
             return;
         taken = 1;
-        if (from is Conveyor)
+        ConveyorItem item = new ConveyorItem() {  item = given, pos = 0.0f, prev_dir = this.Direction };
+        if (from is Conveyor conv)
         {
+            item.prev_dir = conv.Direction;
             queue.Add(item);
-            items.Add(item, 0);
-            item.amount--;
+            taken = 1;
         }
         else
         {
             float newPos = 0.0f;
-            if (items.Count > 0)
-                newPos = items.Last().Value - 1.0f / capacity;
+            if (queue.Count > 0)
+                newPos = queue.Last().pos - 1.0f / capacity;
             newPos = Mathf.Max(newPos, 0);
             queue.Insert(queue.Count, item);
-            items.Add(item, 0);
-            item.amount--;
+            taken = 1;
         }
+    }
+
+    public override void OnEntityDestroyed()
+    {
+        base.OnEntityDestroyed();
+        foreach (var item in queue)
+        {
+            GameObject.Destroy(item.item.transform.gameObject);
+        }
+        queue.Clear();
     }
 
     public bool CanAcceptFrom(IItemTransport from)

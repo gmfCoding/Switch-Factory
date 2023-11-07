@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,9 +40,15 @@ public class Item
         return transform != null && transform is RectTransform;
     }
 
-
+    
     public void LinkTransform(Transform trans)
     {
         this.transform = trans;
+    }
+
+    public void Virtualise()
+    {
+        if (transform != null)
+            GameObject.Destroy(transform.gameObject);
     }
 }

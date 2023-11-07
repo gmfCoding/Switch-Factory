@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bde61292652adab4d81027c3ee8ddda4, type: 3}
+  m_Name: ConvIntersection
+  m_EditorClassIdentifier: 
+  name: conv_intersection
+  description: Straight Conveyor
+  model: {fileID: 2707236697090754681, guid: 02532095fa7adc944b791f332ab827d3, type: 3}
+  placement: 1
+  directional: 1
+  systemType:
+    m_Name: Conveyor
+    m_AssemblyQualifiedName: 
+    m_AssemblyName: 
+  height: 0
+  direction: {x: 1, y: 0}
