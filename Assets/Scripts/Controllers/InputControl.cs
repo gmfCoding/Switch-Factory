@@ -22,7 +22,12 @@ public class InputControl : MonoBehaviour
     private void Update()
     {
         Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
-        Vector3 movement = new Vector3(inputVector.x, 0, inputVector.y) * moveSpeed;
+        Vector3 dir = (Camera.main.transform.position - transform.position).normalized;
+        Vector3 relativeRight = Vector3.Cross(dir, Vector3.up).normalized;
+        Vector3 relativeForward = Vector3.Cross(relativeRight, Vector3.up).normalized;
+
+        Vector3 movement = (relativeRight * inputVector.x + relativeForward * inputVector.y ) * moveSpeed;
+
         transform.Translate(movement * Time.deltaTime, Space.World);
         if (movement != Vector3.zero)
         {
@@ -37,4 +42,4 @@ public class InputControl : MonoBehaviour
     //    if (context.performed)
     //        Debug.Log("Interacted" + context.phase);
     //}
-}
+}   

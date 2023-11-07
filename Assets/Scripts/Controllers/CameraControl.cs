@@ -30,9 +30,7 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         HandleZoom();
-         isCameraRotationEnabled = Input.GetAxis("Fire3") > 0;
-        if (isCameraRotationEnabled)
-            HandleRotation();
+        HandleRotation();
         transform.localEulerAngles = currentRotation;
         transform.position = target.position - transform.forward * distanceFromTarget; 
     }
@@ -50,9 +48,20 @@ public class CameraControl : MonoBehaviour
 
     void HandleRotation()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
-
+        float mouseX = 0;
+        float mouseY = 0;
+        isCameraRotationEnabled = Input.GetAxis("Fire2") > 0; // Are we using mouse?
+        if (isCameraRotationEnabled)
+        {
+            mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+            mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+        }
+        else
+        { 
+            mouseX = Input.GetAxis("Look X") * mouseSensitivity;
+            mouseY = Input.GetAxis("Look Y") * mouseSensitivity;
+        }
+        Debug.Log(mouseY);
         rotationY += mouseX;
         rotationX -= mouseY;
         distanceFromTarget = Mathf.Clamp(distanceFromTarget, minZoomDistance, maxZoomDistance);
