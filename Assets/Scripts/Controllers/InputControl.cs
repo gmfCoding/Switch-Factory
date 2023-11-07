@@ -9,25 +9,32 @@ public class InputControl : MonoBehaviour
     private PlayerInput playerInput;
     private InputActions playerInputActions;
     public float moveSpeed = 1f;
+    public float rotateSpeed = 1f;
     private void Awake()
     {
         playerRigidbody = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         playerInputActions = new InputActions();
         playerInputActions.Player.Enable();
-        playerInputActions.Player.Interact.performed += Interact;
+        //playerInputActions.Player.Interact.performed += Interact;
     }
 
     private void Update()
     {
         Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
         Vector3 movement = new Vector3(inputVector.x, 0, inputVector.y) * moveSpeed;
-        transform.Translate(movement * Time.deltaTime);
+        transform.Translate(movement * Time.deltaTime, Space.World);
+        if (movement != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotateSpeed * Time.deltaTime);
+        }
+
     }
 
-    public void Interact(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-            Debug.Log("Interacted" + context.phase);
-    }
+    //public void Interact(InputAction.CallbackContext context)
+    //{
+    //    if (context.performed)
+    //        Debug.Log("Interacted" + context.phase);
+    //}
 }
