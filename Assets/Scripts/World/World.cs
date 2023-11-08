@@ -10,9 +10,12 @@ public class World : MonoBehaviour, IItemContainer
     public float time = 0;
 
     [Range(0f, 1000)]
-    int width = 10;
+    public int width = 20;
     [Range(0f, 1000)]
-    int height = 10;
+    public int height = 20;
+
+    public static int Width => Game.instance.world.width;
+    public static int Height => Game.instance.world.height;
 
     short[,] background;
     Tile[,] tiles;
@@ -112,7 +115,6 @@ public class World : MonoBehaviour, IItemContainer
     {
         throw new NotImplementedException();
     }
-
 
     public bool InBounds(Vector2Int pos)
     {

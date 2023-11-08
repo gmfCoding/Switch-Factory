@@ -633,6 +633,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tickRate: 40
   time: 0
+  width: 20
+  height: 20
 --- !u!114 &1028839061
 MonoBehaviour:
   m_ObjectHideFlags: 0

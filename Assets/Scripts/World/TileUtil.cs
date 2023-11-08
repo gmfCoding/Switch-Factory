@@ -37,13 +37,13 @@ public class TileUtil
 
     public static Vector2Int WorldspaceToTile(Vector3 point)
     {
-        return new Vector2Int(Mathf.FloorToInt(point.x), Mathf.FloorToInt(point.z));
+        return point.WorldToTile();
     }
 
-    public static UnityEngine.Vector3 TileToWorldspace(Vector2Int pos, TileTransform mode)
+    public static Vector3 TileToWorldspace(Vector2Int pos, TileTransform mode)
     {
         if (mode != TileTransform.Pure)
-            return pos.toVec3XZ() + new Vector3(0.5f, mode == TileTransform.CentricOffset ? 0.5f : 0f, 0.5f);;
-        return pos.toVec3XZ();
+            return (pos.toVec3XZ() + new Vector3(.5f, mode == TileTransform.CentricOffset ? 0.5f : 0f, 0.5f)).TileToWorld();
+        return pos.toVec3XZ().TileToWorld();
     }
 }

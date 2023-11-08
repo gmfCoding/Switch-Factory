@@ -119,7 +119,7 @@ public class Builder : MonoBehaviour
             Game.instance.world.SetTile(selectedTile, tilePos);
             var entity = Game.instance.world.GetTileEntity(tilePos);
             if (entity != null)
-                TileEntityVisual.SetModelRotation(entity.Info, entity.obj.transform, TileUtil.IndexTileRotaiton(RotationIndex));
+                entity.Direction = TileUtil.IndexTileRotaiton(RotationIndex);
         }
         else if (Input.GetMouseButtonDown(1) && tile.entity != null)
         {

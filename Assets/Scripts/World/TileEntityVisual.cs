@@ -127,7 +127,6 @@ public static class TileEntityVisual
         else
         { 
             placeable = placeables[Mathf.Max(0, Mathf.Min(placeables.Length - 1, connected))];
-   
         }
         var tile = Game.instance.GetAsset<ConveyorTileInfo>(placeable);
         if (target == null)

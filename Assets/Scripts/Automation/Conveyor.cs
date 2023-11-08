@@ -12,7 +12,7 @@ public class ConveyorItem
 public class Conveyor : TileEntity, IItemTransport, ITickable
 {
     const float speed = 0.028f;
-    const int capacity = 1;
+    const int capacity = 2;
 
     //public Dictionary<Item, float> items = new Dictionary<Item, float>();
     public List<ConveyorItem> queue = new List<ConveyorItem>();
@@ -108,6 +108,7 @@ public class Conveyor : TileEntity, IItemTransport, ITickable
         {
             GameObject.Destroy(item.item.transform.gameObject);
         }
+        ConveyorVis.instance.conveyors.Remove(this);
         queue.Clear();
     }
 
