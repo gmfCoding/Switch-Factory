@@ -18,8 +18,7 @@ public struct Tile
 
     public short groundTexture;
 
-    public short resourceID;
-    public short resources;
+    public ResourceInstance resource;
 
     public TileInfo tile;
 
@@ -74,7 +73,7 @@ public struct Tile
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(resourceID, tile, type, entity);
+        return HashCode.Combine(resource.info, tile, type, entity);
     }
 
     internal void Write(BinaryWriter wr)

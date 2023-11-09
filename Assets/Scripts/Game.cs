@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class Game : MonoBehaviour
 {
@@ -54,7 +56,13 @@ public class Game : MonoBehaviour
             assets.Add(item.Name, item);
             if (item is SmelterRecipeInfo sri)
                 SmelterRecipeInfo.recipes.Add(sri);
+            else if (item is ResourceInfo ri)
+            {
+                ResourceInfo.data.Add(ri);
+            }
         }
+        for (byte i = 0; i < ResourceInfo.data.Count; i++)
+            ResourceInfo.id.Add(ResourceInfo.data[i], i);
         isLoaded = true;
     }
 

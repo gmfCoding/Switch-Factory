@@ -1,13 +1,7 @@
-using Palmmedia.ReportGenerator.Core.Common;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class World : MonoBehaviour
 {
@@ -29,11 +23,20 @@ public class World : MonoBehaviour
 
     HashSet<ItemStack> dropped = new HashSet<ItemStack>();
 
+    [Header("Resource spawn info")]
+    public float scale;
+    public float offsetX;
+    public float offsetY;
+
     public void Awake()
     {
-       InitialiseTiles(width, height);
+        InitialiseTiles(width, height);
     }
 
+    public void Start()
+    {
+        GenerateResources();
+    }
 
     public void Update()
     {
@@ -49,6 +52,34 @@ public class World : MonoBehaviour
             Deserialise();
         else if (Input.GetKeyDown(KeyCode.C))
             InitialiseTiles(width, height);
+        else if (Input.GetKeyDown(KeyCode.K))
+        {
+            foreach (GameObject g in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+            {
+                int triangleCount = 0;
+                foreach (MeshFilter m in g.GetComponentsInChildren<MeshFilter>())
+                {
+                    triangleCount += m.mesh.triangles.Length;
+                }
+                Debug.Log(g.name + " has " + triangleCount.ToString() + " triangles");
+            }
+        }
+    }
+
+    public void GenerateResources()
+    {
+        var res = Game.instance.GetAsset<ResourceInfo>("resource_iron_ore");
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                var s = Mathf.PerlinNoise((x * scale) + offsetX, (y * scale) + offsetY);
+                if (s > 0.9)
+                {
+                    SetTileResource(res, new Vector2Int(x, y));
+                }
+            }
+        }
     }
 
     public TileEntity GetTileEntity(Vector2Int pos)
@@ -72,8 +103,7 @@ public class World : MonoBehaviour
         Tile tile = tiles[pos.y, pos.x];
         tile.entity = null;
         tile.tile = null;
-        tile.resourceID = 0;
-        tile.resources = 0;
+        tile.resource = new ResourceInstance();
         tiles[pos.y, pos.x] = tile;
     }
 
@@ -95,6 +125,8 @@ public class World : MonoBehaviour
             
         }
         tiles[pos.y, pos.x] = tile;
+        if (tile.entity != null && tile.entity.obj != null)
+            tile.entity.obj.GetComponent<TileCallback>()?.OnCreated(this, pos);
         return tile.entity;
     }
 
@@ -129,10 +161,22 @@ public class World : MonoBehaviour
                 wr.Write(tile.tile == null);
                 if (tile.tile == null)
                     continue;
-                wr.Write(tile.tile.Name);
-                wr.Write(tile.resourceID);
-                wr.Write(tile.resources);
-                wr.Write(tile.entity != null);
+                var hasResource = tile.resource.info != null;
+                var hasEntity = tile.entity != null;
+                var hasTile = tile.tile != null;
+                wr.Write(hasResource);
+                wr.Write(hasEntity);
+                wr.Write(hasTile);
+                if (hasTile)
+                { 
+                    wr.Write(tile.tile.Name);
+                }
+                if (hasResource)
+                {
+                    wr.Write(tile.resource.info.name);
+                    wr.Write(tile.resource.size);
+                    wr.Write(tile.resource.remaining);
+                }
                 if (tile.entity != null)
                 { 
                     wr.Write(tile.entity.Direction.x);
@@ -169,7 +213,7 @@ public class World : MonoBehaviour
         BinaryReader rd = new BinaryReader(stream);
 
         InitialiseTiles(tiles.GetLength(0), tiles.GetLength(1));
-        this.width =  rd.ReadInt32();
+        this.width = rd.ReadInt32();
         this.height = rd.ReadInt32();
         tiles = new Tile[height, width];
         InitialiseTiles(width, height);
@@ -180,16 +224,64 @@ public class World : MonoBehaviour
                 if (rd.ReadBoolean())
                     continue;
                 var pos = new Vector2Int(x, y);
-                var Name = rd.ReadString();
-                SetTile(Game.instance.GetAsset<TileInfo>(Name), pos);
-                tiles[y, x].resourceID = rd.ReadInt16();
-                tiles[y, x].resources = rd.ReadInt16();
+                var hasResource = rd.ReadBoolean();
                 var hasEntity = rd.ReadBoolean();
+                var hasTile = rd.ReadBoolean();
+                if (hasTile)
+                    SetTile(Game.instance.GetAsset<TileInfo>(rd.ReadString()), pos);
+                if (hasResource)
+                {
+                    tiles[y, x].resource.info = Game.instance.GetAsset<ResourceInfo>(rd.ReadString());
+                    tiles[y, x].resource.size = rd.ReadInt16();
+                    tiles[y, x].resource.remaining = rd.ReadInt16();
+                }
                 if (hasEntity)
                 {
                     GetTileEntity(pos).Direction = new Vector2Int(rd.ReadInt32(), rd.ReadInt32());
                 }
             }
         }
+    }
+
+    public ResourceInfo GetTileResource(Vector2Int pos)
+    {
+        if (!InBounds(pos))
+            return null;
+        return tiles[pos.y, pos.x].resource.info;
+    }
+
+    public void SetTileResource(ResourceInfo resource, Vector2Int pos)
+    {
+        if (!InBounds(pos))
+            return;
+        var tile = GetTile(pos);
+        if (resource == null)
+        {
+            if (tile.resource.info != null)
+                tile.resource.OnDestroy();
+            return;
+        }
+        tile.resource.info = resource;
+        int size = resource.max;
+        if (resource.randomise)
+            size = UnityEngine.Random.Range(resource.min, resource.max);
+        tile.resource.remaining = size;
+        tile.resource.size = size;
+        if (resource.Model != null)
+            tile.resource.obj = GameObject.Instantiate(resource.Model);
+        SetTileInternal(tile, pos);
+        if (tile.resource.obj != null)
+            tile.resource.obj.GetComponent<TileCallback>()?.OnCreated(this, pos);
+    }
+
+    public ref ResourceInstance GetResourceInstanceReference(Vector2Int pos)
+    {
+        return ref tiles[pos.y, pos.y].resource;
+    }
+
+    internal void SetTileInternal(Tile tile, Vector2Int pos)
+    {
+        if (InBounds(pos))
+            tiles[pos.y, pos.x] = tile;
     }
 }
