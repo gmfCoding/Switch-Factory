@@ -36,7 +36,7 @@ public class ConveyorVis : MonoBehaviour
             {
                 if (!item.item.ExistInWorld())
                     item.item.LinkTransform(Instantiate(item.item.item.Model).transform);
-                Vector2 pos = GetConveyorItemPath(item.prev_dir, conv.pos, conv.Direction, item.pos);
+                Vector2 pos = GetConveyorItemPath(item.from, conv.pos, conv.Direction, item.pos);
                 item.item.transform.position = new Vector3(pos.x, height, pos.y).TileToWorld();
             }
         }

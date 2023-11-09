@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: iron
   m_EditorClassIdentifier: 
   name: iron
-  description: Iron Plate
+  description: Iron
   model: {fileID: 7093274381810304300, guid: 8434f5569d71ff9428f66c57f8bf1f6d, type: 3}

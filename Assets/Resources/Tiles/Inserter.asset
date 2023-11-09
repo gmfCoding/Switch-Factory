@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d780a6682f39cd4e94b781bc12a5056, type: 3}
+  m_Name: Inserter
+  m_EditorClassIdentifier: 
+  name: inserter
+  description: Moves items using an arm.
+  model: {fileID: 919132149155446097, guid: 56b33f30386f90f45bc0db77e88eab6f, type: 3}
+  placement: 1
+  directional: 1
+  systemType:
+    m_Name: Inserter
+    m_AssemblyQualifiedName: 
+    m_AssemblyName: 
+  height: 0
+  cost:
+    cost:
+    - item: {fileID: 11400000, guid: 126e91a314829674d9432b34e440c5c7, type: 2}
+      amount: 10
+  cycle: 40
+  capacity: 1

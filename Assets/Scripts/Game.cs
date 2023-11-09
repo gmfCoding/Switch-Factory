@@ -52,6 +52,8 @@ public class Game : MonoBehaviour
         foreach (var item in loaded)
         {
             assets.Add(item.Name, item);
+            if (item is SmelterRecipeInfo sri)
+                SmelterRecipeInfo.recipes.Add(sri);
         }
         isLoaded = true;
     }

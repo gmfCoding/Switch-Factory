@@ -3,25 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnConveyorExample : MonoBehaviour, IItemTransport
+public class SpawnConveyorExample : MonoBehaviour
 {
     World world;
     List<Conveyor> conveyors = new List<Conveyor>();
-    public bool CanAcceptFrom(IItemTransport from)
-    {
-        return true;
-    }
-
-    public void Give(Item item, IItemTransport target, out int taken)
-    {
-        taken = 1;
-    }
-
-    public Item Take()
-    {
-        return new Item(Game.instance.GetAsset<ItemInfo>("iron"), 1);
-    }
-
     void CreateConveyor(Vector2Int pos, Vector2Int dir)
     { 
         var conv = world.SetTile(TileInfo.GetTile("conv_straight"),pos);

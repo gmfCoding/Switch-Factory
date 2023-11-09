@@ -11,5 +11,7 @@ public class ItemInfo : AssetInfo
     [SerializeField]
     private GameObject model;
 
+    public int maxStack = 100;
+
     public GameObject Model { get => model; }
 }

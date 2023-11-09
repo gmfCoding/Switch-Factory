@@ -6,10 +6,12 @@ using UnityEngine;
 public class ItemRecipeInfo : AssetInfo
 {
     [SerializeField]
-    private List<Item> input;
+    private List<ItemStack> input;
     [SerializeField]
-    private List<Item> output;
+    private List<ItemStack> output;
 
-    public List<Item> Input { get => input; }
-    public List<Item> Output { get => output; }
+    public List<ItemStack> Input { get => input; }
+    public List<ItemStack> Output { get => output; }
+
+    public int time;
 }

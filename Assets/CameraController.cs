@@ -7,8 +7,16 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public Transform follow;
+    public Transform rotor;
     public float speed = 3.0f;
 
+    [SerializeField] private float mouseSensitivity = 3.0f;
+
+    private float rotationY = 0;
+    private float rotationX = 0;
+    private Vector3 currentRotation;
+    [SerializeField] private Vector2 rotationXMinMax = new Vector2(-0, 90);
+    [SerializeField] private Vector2 rotationStartPos = new Vector2(-0, 90);
     // Update is called once per frame
     void Update()
     {
@@ -24,9 +32,16 @@ public class CameraController : MonoBehaviour
         if (Input.GetKey(KeyCode.S))
             wish -= forward;
 
-        if (Input.GetMouseButtonDown(2))
+        if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(1))
         {
-            
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+            rotationX -= mouseY;
+            rotationX = Mathf.Clamp(rotationX, rotationXMinMax.x, rotationXMinMax.y);
+            Vector3 nextRotation = new Vector3(rotationX, 0);
+            rotor.localEulerAngles = nextRotation;
+            follow.eulerAngles += new Vector3(0, mouseX, 0);
         }
         wish.Normalize();
         follow.position += wish * speed * Time.deltaTime;

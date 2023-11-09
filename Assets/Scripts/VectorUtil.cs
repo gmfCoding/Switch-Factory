@@ -14,11 +14,30 @@ public static class VectorUtil
     {
         return new Vector3(direction.x, direction.y, 0);
     }
-    
+
+    public static Vector2Int Side(this Vector2Int v)
+    {
+        return new (v.y, v.x);
+    }
+
+    public static Vector2Int Transform(this Vector2Int dir, Vector2Int v)
+    {
+        if (dir.y == 1)
+            return v;
+        else if (dir.x == 1)
+            return new(v.y, v.x);
+        else if (dir.y == -1)
+            return new(-v.x, -v.y);
+        else if (dir.x == -1)
+            return new(-v.y, -v.x);
+        throw new Exception($"Vector2Int.Transform: cannot transform {v} by {dir}");
+    }
+
     public static float Cross(Vector2Int a, Vector2Int b)
     {
         return (a.x * b.y - a.y * b.x);
     }
+
 
     public static Vector3 XYtoXZ(this Vector3 xy)
     {

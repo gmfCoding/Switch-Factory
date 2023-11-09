@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public enum TileBase
@@ -8,6 +9,7 @@ public enum TileBase
     Invalid, Floor, Wall, Lava
 }
 
+[System.Serializable]
 public struct Tile
 {
     public static Tile Empty = new Tile { type = TileBase.Invalid };
@@ -73,5 +75,10 @@ public struct Tile
     public override int GetHashCode()
     {
         return HashCode.Combine(resourceID, tile, type, entity);
+    }
+
+    internal void Write(BinaryWriter wr)
+    {
+        
     }
 }

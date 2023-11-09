@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemConsumer : TileEntity, IItemTransport
+public class ItemConsumer : TileEntity, IItemContainer
 {
     public string itemName = "iron";
     bool enabled = true;
@@ -15,24 +15,43 @@ public class ItemConsumer : TileEntity, IItemTransport
 
     }
 
-    public Item Take()
+    public override bool IsWalkable()
     {
-        return new Item(Game.instance.GetAsset<ItemInfo>(itemName), 1);
+        return false;
     }
 
-    public void Give(Item item, IItemTransport target, out int taken)
+    public ItemStack Remove(ItemFilter filter, int amount)
     {
-        taken = 1;
-        item.Virtualise();
+        return null;
     }
 
-    public bool CanAcceptFrom(IItemTransport from)
+    public ItemStack Remove(ItemStack item)
+    {
+        return null;
+    }
+
+    public bool CanAcceptFrom(IItemContainer from)
     {
         return true;
     }
 
-    public override bool IsWalkable()
+    public bool CanAdd(ItemStack stack)
     {
-        return false;
+        return true;
+    }
+
+    public IEnumerable<ItemStack> GetAvailableItems()
+    {
+        return null;
+    }
+
+    public bool TryAdd(ItemStack item, IItemContainer target, out int taken, out int remaining)
+    {
+        if (!IItemContainer.TryAddDefault(this, item, target, out taken, out remaining))
+            return false;
+        taken = item.amount;
+        remaining = 0;
+        item.Virtualise();
+        return true;
     }
 }

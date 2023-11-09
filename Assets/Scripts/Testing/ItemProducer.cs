@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class ItemProducer : TileEntity, ITickable, IItemTransport
+public class ItemProducer : TileEntity, ITickable, IItemContainer
 {
-    public string itemName = "iron";
+    public string itemName = "iron_ore";
     bool enabled = true;
 
     public static World world = Game.instance.world;
@@ -27,26 +28,20 @@ public class ItemProducer : TileEntity, ITickable, IItemTransport
             tick = 0;
             if (world.GetTile(pos + Direction).type == TileBase.Invalid)
                 return;
-            if (world.GetTileEntity(pos + Direction) is IItemTransport trans)
+            if (world.GetTileEntity(pos + Direction) is IItemContainer trans)
             {
-                trans.Give(Take(), this, out int taken); // Unconvention use of Take
-                if (taken > 0)
+                if (trans.TryAdd(Remove(null, 1), this, out _, out _)) // Unconvention use of Take
                     Debug.Log("Spawning Item");
             }
         }
     }
 
-    public Item Take()
-    {
-        return new Item(Game.instance.GetAsset<ItemInfo>(itemName), 1);
-    }
-
-    public void Give(Item item, IItemTransport target, out int taken)
+    public void TryAdd(ItemStack item, IItemContainer target, out int taken)
     {
         taken = 0;
     }
 
-    public bool CanAcceptFrom(IItemTransport from)
+    public bool CanAcceptFrom(IItemContainer from)
     {
         return false;
     }
@@ -54,5 +49,35 @@ public class ItemProducer : TileEntity, ITickable, IItemTransport
     public override bool IsWalkable()
     {
         return false;
+    }
+
+    public ItemStack Remove(ItemFilter filter, int amount)
+    {
+        var item = Game.instance.GetAsset<ItemInfo>(itemName);
+        if (filter == null || filter.Contains(item))
+            return Remove(null);
+        return null;
+    }
+
+    public ItemStack Remove(ItemStack item)
+    {
+        return new ItemStack(Game.instance.GetAsset<ItemInfo>(itemName), 1);
+    }
+
+    public bool TryAdd(ItemStack item, IItemContainer target, out int taken, out int remaining)
+    {
+        taken = 0;
+        remaining = item != null ? item.Amount : 0;
+        return false;
+    }
+
+    public bool CanAdd(ItemStack stack)
+    {
+        return false;
+    }
+
+    public IEnumerable<ItemStack> GetAvailableItems()
+    {
+        return new List<ItemStack>() { Remove(null, 1) };
     }
 }

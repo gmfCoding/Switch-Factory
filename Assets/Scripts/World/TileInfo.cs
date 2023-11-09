@@ -24,6 +24,8 @@ public class TileInfo : AssetInfo
     public bool Directional { get => directional; }
     public float Height { get => height; }
 
+    public Vector2Int span = Vector2Int.one;
+
     public virtual Tile Create()
     { 
         Tile tile = new Tile();

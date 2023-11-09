@@ -1,10 +1,12 @@
+using Palmmedia.ReportGenerator.Core.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class World : MonoBehaviour, IItemContainer
+public class World : MonoBehaviour
 {
     public float tickRate = 30;
     public float time = 0;
@@ -23,7 +25,7 @@ public class World : MonoBehaviour, IItemContainer
     HashSet<TileEntity> entities = new HashSet<TileEntity>();
     HashSet<ITickable> tickables = new HashSet<ITickable>();
 
-    HashSet<Item> dropped = new HashSet<Item>();
+    HashSet<ItemStack> dropped = new HashSet<ItemStack>();
 
     public void Awake()
     {
@@ -37,6 +39,8 @@ public class World : MonoBehaviour, IItemContainer
             }
         }
         background = new short[height, height];
+
+        Serialise();
     }
 
 
@@ -65,6 +69,7 @@ public class World : MonoBehaviour, IItemContainer
             entities.Remove(prev);
             if (prev is ITickable tickable)
                 tickables.Remove(tickable);
+            tiles[pos.y, pos.x].entity = null; // Important for cyclical ClearTile's from within OnEntityDestroyed.
             prev.OnEntityDestroyed();
         }
         Tile tile = tiles[pos.y, pos.x];
@@ -101,21 +106,6 @@ public class World : MonoBehaviour, IItemContainer
         return new Vector3(tile.x, 0, tile.y);
     }
 
-    public void Remove(Item item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Add(Item item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Clear()
-    {
-        throw new NotImplementedException();
-    }
-
     public bool InBounds(Vector2Int pos)
     {
         return pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < height;
@@ -127,4 +117,30 @@ public class World : MonoBehaviour, IItemContainer
             return Tile.Empty;
         return tiles[pos.y, pos.x];
     }
+
+    public void Serialise()
+    {
+        Debug.Log(JsonUtility.ToJson(this));
+    }
+    //public void Serialise()
+    //{
+    //    var stream = File.Open(Application.persistentDataPath, FileMode.OpenOrCreate);
+    //    BinaryWriter wr = new BinaryWriter(stream);
+    //    var types = Game.instance.GetAllAssets<TileInfo>();
+    //    foreach (var item in types)
+    //    {
+    //        wr.Write(item.GetType());
+            
+    //    }
+    //    wr.Write(this.width);
+    //    wr.Write(this.height);
+    //    for (int y = 0; y < height; y++)
+    //    {
+    //        for (int x = 0; x < width; x++)
+    //        {
+    //            tiles[y, x].Write(wr);
+    //        }
+    //    }
+    //}
+
 }

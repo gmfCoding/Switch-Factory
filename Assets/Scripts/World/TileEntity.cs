@@ -10,6 +10,7 @@ public abstract class TileEntity
     public Vector2Int pos;
     private Vector2Int direction;
     TileInfo           info;
+    public bool destroyed = false;
 
     public Vector2Int Direction
     {
@@ -39,7 +40,8 @@ public abstract class TileEntity
     }
 
     public virtual void OnEntityDestroyed()
-    { 
+    {
+        destroyed = true;
         if (obj != null)
             GameObject.Destroy(obj);
     }
