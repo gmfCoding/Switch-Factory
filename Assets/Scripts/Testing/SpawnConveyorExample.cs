@@ -7,6 +7,8 @@ public class SpawnConveyorExample : MonoBehaviour
 {
     World world;
     List<Conveyor> conveyors = new List<Conveyor>();
+
+    public Vector2Int offset;
     void CreateConveyor(Vector2Int pos, Vector2Int dir)
     { 
         var conv = world.SetTile(TileInfo.GetTile("conv_straight"),pos);
@@ -18,15 +20,15 @@ public class SpawnConveyorExample : MonoBehaviour
     void Start()
     {
         world = Game.instance.world;
-        var prod = world.SetTile(TileInfo.GetTile("item_producer"), new Vector2Int(1, 2));
+        var prod = world.SetTile(TileInfo.GetTile("item_producer"), new Vector2Int(offset.x + 1, offset.y + 2));
         prod.Direction = Vector2Int.right;
-        CreateConveyor(new Vector2Int(2, 2), Vector2Int.right);
-        CreateConveyor(new Vector2Int(3, 2), Vector2Int.right);
-        CreateConveyor(new Vector2Int(4, 2), Vector2Int.up);
-        CreateConveyor(new Vector2Int(4, 3), Vector2Int.left);
-        CreateConveyor(new Vector2Int(3, 3), Vector2Int.up);
-        CreateConveyor(new Vector2Int(3, 4), Vector2Int.up);
-        var cons = world.SetTile(TileInfo.GetTile("item_consumer"), new Vector2Int(3, 5));
+        CreateConveyor(new Vector2Int(offset.x + 2, offset.y + 2), Vector2Int.right);
+        CreateConveyor(new Vector2Int(offset.x + 3, offset.y + 2), Vector2Int.right);
+        CreateConveyor(new Vector2Int(offset.x + 4, offset.y + 2), Vector2Int.up);
+        CreateConveyor(new Vector2Int(offset.x + 4, offset.y + 3), Vector2Int.left);
+        CreateConveyor(new Vector2Int(offset.x + 3, offset.y + 3), Vector2Int.up);
+        CreateConveyor(new Vector2Int(offset.x + 3, offset.y + 4), Vector2Int.up);
+        var cons = world.SetTile(TileInfo.GetTile("item_consumer"), new Vector2Int(offset.x + 3, offset.y + 5));
         cons.Direction = Vector2Int.down;
 
         /*

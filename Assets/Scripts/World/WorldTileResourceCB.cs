@@ -8,5 +8,6 @@ public class WorldTileResourceCB : TileCallback
     public override void OnCreated(World world, Vector2Int pos)
     {
         ref var res = ref world.GetResourceInstanceReference(pos);
+        transform.position = TileUtil.TileToWorldspace(pos, TileUtil.TileTransform.Centric);
     }
 }
