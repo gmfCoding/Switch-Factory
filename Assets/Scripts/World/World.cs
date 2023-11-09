@@ -3,7 +3,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.EventSystems.EventTrigger;
 
 public class World : MonoBehaviour
@@ -19,7 +22,6 @@ public class World : MonoBehaviour
     public static int Width => Game.instance.world.width;
     public static int Height => Game.instance.world.height;
 
-    short[,] background;
     Tile[,] tiles;
 
     HashSet<TileEntity> entities = new HashSet<TileEntity>();
@@ -29,18 +31,7 @@ public class World : MonoBehaviour
 
     public void Awake()
     {
-        tiles = new Tile[height, width];
-        for (int j = 0; j < height; j++)
-        {
-            for (int i = 0; i < width; i++)
-            {
-                tiles[j, i] = new Tile();
-                tiles[j, i].type = TileBase.Floor;
-            }
-        }
-        background = new short[height, height];
-
-        Serialise();
+       InitialiseTiles(width, height);
     }
 
 
@@ -52,6 +43,12 @@ public class World : MonoBehaviour
             foreach (var t in tickables)
                 t.Tick();
         }
+        if (Input.GetKeyDown(KeyCode.P))
+            Serialise();
+        else if (Input.GetKeyDown(KeyCode.L))
+            Deserialise();
+        else if (Input.GetKeyDown(KeyCode.C))
+            InitialiseTiles(width, height);
     }
 
     public TileEntity GetTileEntity(Vector2Int pos)
@@ -120,27 +117,79 @@ public class World : MonoBehaviour
 
     public void Serialise()
     {
-        Debug.Log(JsonUtility.ToJson(this));
+        var stream = File.Open(Path.Combine(Application.persistentDataPath, "world.dat"), FileMode.OpenOrCreate);
+        BinaryWriter wr = new BinaryWriter(stream);
+        wr.Write(this.width);
+        wr.Write(this.height);
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                Tile tile = tiles[y, x];
+                wr.Write(tile.tile == null);
+                if (tile.tile == null)
+                    continue;
+                wr.Write(tile.tile.Name);
+                wr.Write(tile.resourceID);
+                wr.Write(tile.resources);
+                wr.Write(tile.entity != null);
+                if (tile.entity != null)
+                { 
+                    wr.Write(tile.entity.Direction.x);
+                    wr.Write(tile.entity.Direction.y);
+                }
+            }
+        }
     }
-    //public void Serialise()
-    //{
-    //    var stream = File.Open(Application.persistentDataPath, FileMode.OpenOrCreate);
-    //    BinaryWriter wr = new BinaryWriter(stream);
-    //    var types = Game.instance.GetAllAssets<TileInfo>();
-    //    foreach (var item in types)
-    //    {
-    //        wr.Write(item.GetType());
-            
-    //    }
-    //    wr.Write(this.width);
-    //    wr.Write(this.height);
-    //    for (int y = 0; y < height; y++)
-    //    {
-    //        for (int x = 0; x < width; x++)
-    //        {
-    //            tiles[y, x].Write(wr);
-    //        }
-    //    }
-    //}
 
+    public void InitialiseTiles(int newWidth, int newHeight)
+    {
+        if (tiles != null)
+        {
+            for (int j = 0; j < tiles.GetLength(0); j++)
+                for (int i = 0; i < tiles.GetLength(1); i++)
+                    ClearTile(new Vector2Int(j, i));
+        }
+        width = newWidth;
+        height = newHeight;
+        tiles = new Tile[height, width];
+        for (int j = 0; j < height; j++)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                tiles[j, i] = new Tile();
+                tiles[j, i].type = TileBase.Floor;
+            }
+        }
+    }
+
+    public void Deserialise()
+    {
+        var stream = File.Open(Path.Combine(Application.persistentDataPath, "world.dat"), FileMode.OpenOrCreate);
+        BinaryReader rd = new BinaryReader(stream);
+
+        InitialiseTiles(tiles.GetLength(0), tiles.GetLength(1));
+        this.width =  rd.ReadInt32();
+        this.height = rd.ReadInt32();
+        tiles = new Tile[height, width];
+        InitialiseTiles(width, height);
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                if (rd.ReadBoolean())
+                    continue;
+                var pos = new Vector2Int(x, y);
+                var Name = rd.ReadString();
+                SetTile(Game.instance.GetAsset<TileInfo>(Name), pos);
+                tiles[y, x].resourceID = rd.ReadInt16();
+                tiles[y, x].resources = rd.ReadInt16();
+                var hasEntity = rd.ReadBoolean();
+                if (hasEntity)
+                {
+                    GetTileEntity(pos).Direction = new Vector2Int(rd.ReadInt32(), rd.ReadInt32());
+                }
+            }
+        }
+    }
 }

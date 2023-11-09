@@ -115,6 +115,8 @@ public class Conveyor : TileEntity, IItemContainer, ITickable
             GameObject.Destroy(item.item.transform.gameObject);
         }
         ConveyorVis.instance.conveyors.Remove(this);
+        foreach (var item in queue)
+            item.item.Virtualise();
         queue.Clear();
     }
 

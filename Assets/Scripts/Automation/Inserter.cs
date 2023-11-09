@@ -10,8 +10,6 @@ public class Inserter : TileEntity, ITickable
 
     internal int tick;
 
-    public List<ItemStack> filter;
-
     public new InserterInfo Info => base.Info as InserterInfo;
     public Vector2Int Source { get => src; set => src = value; }
     public Vector2Int Target { get => dst; set => dst = value; }
@@ -54,7 +52,12 @@ public class Inserter : TileEntity, ITickable
             tick = 0;
         }
     }
-
+    
+    public override void OnEntityDestroyed()
+    {
+        base.OnEntityDestroyed();
+        item?.Virtualise();
+    }
     public override bool IsWalkable()
     {
         return true;
