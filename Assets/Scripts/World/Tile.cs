@@ -18,8 +18,6 @@ public struct Tile
 
     public short groundTexture;
 
-    public ResourceInstance resource;
-
     public TileInfo tile;
 
     public TileBase type;
@@ -73,13 +71,12 @@ public struct Tile
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(resource.info, tile, type, entity);
+        return HashCode.Combine(tile, type, entity);
     }
 
     public override string ToString()
     {
         return $"type:{type}\n" +
-            $"resource:{(resource.info != null ? resource.info.Name : "none")}\n" +
             $"entity:{(entity != null ? entity.Info.Name : "none")}\n" +
             $"tile:{(tile != null ? tile.Name : "none")}\n";
     }

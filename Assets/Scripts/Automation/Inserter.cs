@@ -23,8 +23,8 @@ public class Inserter : TileEntity, ITickable
 
     public void Tick()
     {
-        src = this.Direction;
-        dst = -this.Direction;
+        src = -this.Direction;
+        dst = this.Direction;
         var srcTile = Game.instance.world.GetTileEntity(this.pos + src) as IItemContainer;
         var dstTile = Game.instance.world.GetTileEntity(this.pos + dst) as IItemContainer;
         if (srcTile == null || dstTile == null)
@@ -34,7 +34,10 @@ public class Inserter : TileEntity, ITickable
         {
             var take = srcTile.GetAvailableItems().Where(x => dstTile.CanAdd(x)).FirstOrDefault();
             if (take != null)
+            {
                 item = srcTile.Remove(take);
+                this.obj.GetComponent<Animator>()?.Play("Base Layer.Insert", -1);
+            }
         }
         else if (tick > Info.cycle && item != null)
         {

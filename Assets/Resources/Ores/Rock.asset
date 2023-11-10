@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5686fb8e0b7c54a4e9fdf48d4308ad03, type: 3}
   m_Name: Rock
   m_EditorClassIdentifier: 
-  name: resource_rock
+  name: 
   description: 
-  randomise: 1
-  min: 1000
-  max: 2000
-  gatherModes: -1
+  randomise: 0
+  min: 0
+  max: 0
+  gatherModes: 5
   spawnInfo:
     type: 0
     size: 0
     offsetX: 0
     offsetY: 0
-    chance: 0
-  Model: {fileID: 919132149155446097, guid: c931464c368591e4c8c80344a107ff45, type: 3}
+    chance: 0.3
+  Model: {fileID: 4210812533955259219, guid: 9c55fd45e9d8fac4ebaf5bd780ec89c2, type: 3}

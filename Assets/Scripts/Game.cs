@@ -54,13 +54,13 @@ public class Game : MonoBehaviour
             assets.Add(item.Name, item);
             if (item is SmelterRecipeInfo sri)
                 SmelterRecipeInfo.recipes.Add(sri);
-            else if (item is ResourceInfo ri)
+            else if (item is ResourceNodeInfo ri)
             {
-                ResourceInfo.data.Add(ri);
+                ResourceNodeInfo.data.Add(ri);
             }
         }
-        for (byte i = 0; i < ResourceInfo.data.Count; i++)
-            ResourceInfo.id.Add(ResourceInfo.data[i], i);
+        for (byte i = 0; i < ResourceNodeInfo.data.Count; i++)
+            ResourceNodeInfo.id.Add(ResourceNodeInfo.data[i], i);
         isLoaded = true;
     }
 

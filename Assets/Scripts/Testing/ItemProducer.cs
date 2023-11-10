@@ -30,8 +30,7 @@ public class ItemProducer : TileEntity, ITickable, IItemContainer
                 return;
             if (world.GetTileEntity(pos + Direction) is IItemContainer trans)
             {
-                if (trans.TryAdd(Remove(null, 1), this, out _, out _)) // Unconvention use of Take
-                    Debug.Log("Spawning Item");
+                trans.TryAdd(Remove(null, 1), this, out _, out _); // Unconvention use of Take
             }
         }
     }

@@ -14,17 +14,20 @@ public class Builder : MonoBehaviour
     [SerializeField]
     private List<string> placeables;
 
-    bool active;
+    [Header("Selection")]
+    bool inBuildMode;
     public TileInfo selectedInfo;
     private int selected;
     [SerializeField]
     private int rotationIndex;
 
+    [Header("Ghost")]
     public GameObject ghost;
     public Material ghostMaterial;
+    public GameObject ArrowModel;
 
+    [Header("Debug")]
     public TMPro.TMP_Text buildItem;
-
     public TMPro.TMP_Text tileDetails;
 
     public int RotationIndex { 
@@ -44,28 +47,39 @@ public class Builder : MonoBehaviour
         }
     }
 
-    public float RightClickTime
-    {
-        get => rightClickTime;
-        set
-        {
-            rightClickTime = value;
-            //rightClickVis.sizeDelta = new Vector2(5, (rightClickDuration - rightClickTime) * 100);
-            //rightClickVis.sizeDelta = Vector2.right * 5 + Vector2.up * (rightClickTime / rightClickDuration) * 30;
-        }
-    }
-
+    [Header("Timing")]
     public float rightClickDuration = 0.2f;
     public RectTransform rightClickVis;
     private float rightClickTime = 0;
     public Vector2Int removeTile;
-
+    public bool isRemoving = false;
 
     public void Start()
     {
         ghost = GameObject.CreatePrimitive(PrimitiveType.Cube);
         placeables = Game.instance.GetAllAssets<TileInfo>().Where(x => x is BuildableTileInfo b && b.buildList).Select(x => x.Name).ToList();
         SetGhostMesh(Selected);
+    }
+
+    public void Update()
+    {
+        Tile tile = GetTileUnderMouse(out bool hit, out Vector3 pos);
+        Vector2Int tilePos = TileUtil.WorldspaceToTile(pos);
+        // Debug information
+        tileDetails.text = tile.ToString();
+        tileDetails.text += tilePos.ToString();
+
+        if (inBuildMode && hit)
+            PlaceGhost(pos, tilePos);
+        else
+            ghost?.SetActive(false);
+
+        if (Input.GetMouseButtonUp(1))
+            isRemoving = false;
+
+        RotationControl(tile);
+        BuildModeControls(tile, tilePos);
+        DebugControls();
     }
 
     void SetGhostMesh(int index)
@@ -79,7 +93,10 @@ public class Builder : MonoBehaviour
             buildItem.text = selectedInfo.Name;
             ghost = Instantiate(selectedInfo.Model);
         }
-        var renderers = ghost.GetComponentsInChildren<MeshRenderer>();
+        var arrow = GameObject.Instantiate(ArrowModel);
+        arrow.transform.SetParent(ghost.transform);
+        arrow.transform.position = Vector3.up;
+        var renderers = ghost.GetComponentsInChildren<Renderer>();
         for (int i = 0; i < renderers.Length; i++)
         {
             renderers[i].material = ghostMaterial;
@@ -105,16 +122,34 @@ public class Builder : MonoBehaviour
         return Tile.Empty;
     }
 
-
-    public void Update()
+    public void PlaceGhost(Vector3 pos, Vector2Int tilePos)
     {
-        Tile tile = GetTileUnderMouse(out bool hit, out Vector3 pos);
-        Vector2Int tilePos = TileUtil.WorldspaceToTile(pos);
-        tileDetails.text = tile.ToString();
-        tileDetails.text += tilePos.ToString();
+        ghost?.SetActive(true);
+        ghost.transform.position = TileUtil.TileToWorldspace(tilePos, TileUtil.TileTransform.Centric);
+        ghost.transform.rotation = Quaternion.LookRotation(TileUtil.IndexTileRotaiton(RotationIndex).toVec3XZ(), Vector3.up);
+        //DrawQueue.Add(DrawSphere.Create(pos, 0.4f, Color.red));
+        //DrawQueue.Add(DrawArrow.Create(ghost.transform.position + Vector3.up * 1.5f, ghost.transform.position + Vector3.up * 1.5f + TileUtil.IndexTileRotaiton(RotationIndex).toVec3XZ(), Color.red));
+    }
+
+    public void RotationControl(Tile tile)
+    {
+        bool inverse = Input.GetKey(KeyCode.LeftShift);
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (tile.entity is TileEntity e)
+                e.Direction = TileUtil.IndexTileRotaiton(TileUtil.TileRotationIndex(e.Direction) + (Input.GetKey(KeyCode.LeftShift) ? -1 : 1));
+            if (inverse)
+                RotationIndex--;
+            else
+                RotationIndex++;
+        }
+    }
+
+    public void BuildModeControls(Tile tile, Vector2Int tilePos)
+    {
         if (Input.GetKeyDown(KeyCode.B))
-            active = !active;
-        if (!active)
+            inBuildMode = !inBuildMode;
+        if (!inBuildMode)
             return;
         bool inverse = Input.GetKey(KeyCode.LeftShift);
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -131,24 +166,7 @@ public class Builder : MonoBehaviour
         {
             if (Game.instance.world.GetTileEntity(removeTile) is TileEntity e && e.obj != null)
                 e.obj.transform.localScale = Vector3.one;
-            RightClickTime = 0.0f;
-        }
-        //if (Input.GetKeyDown(KeyCode.G))
-        //{
-        //    if (tile.entity != null)
-        //        tile.entity.Direction = tile.entity.Direction;
-        //}
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            if (tile.IsEmpty())
-            {
-                if (inverse)
-                    RotationIndex--;
-                else
-                    RotationIndex++;
-            }
-            else if (tile.entity is TileEntity e)
-               e.Direction = TileUtil.IndexTileRotaiton(TileUtil.TileRotationIndex(e.Direction) + (Input.GetKey(KeyCode.LeftShift) ? -1 : 1));
+            rightClickTime = 0.0f;
         }
         if (Input.GetMouseButtonDown(0) && tile.entity == null)
         {
@@ -160,31 +178,37 @@ public class Builder : MonoBehaviour
         }
         else
         {
+            if (Input.GetMouseButtonDown(1) && tile.entity != null)
+                isRemoving = true;
             // Tile deletion, hold over a tile for 0.2 (default seconds) to delete.
             // When the user moves on to the next tile before this one is deleted it will  start deleting that tile from T = 0. SEE Tile Deletion Change
-            if (Input.GetMouseButton(1) && tile.entity != null && Game.instance.world.InBounds(tilePos))
+            if (isRemoving && Input.GetMouseButton(1) && Game.instance.world.InBounds(tilePos))
             {
                 removeTile = tilePos;
-                RightClickTime += Time.deltaTime;
-                // The longer we hold for the smaller the tile will be (once it reach size zero it will be deleted)
-                tile.entity.obj.transform.localScale = Vector3.one * (1f - (RightClickTime / rightClickDuration));
-                if (RightClickTime > rightClickDuration)
+                rightClickTime += Time.deltaTime;
+                if (tile.entity != null)
+                    // The longer we hold for the smaller the tile will be (once it reach size zero it will be deleted)
+                    tile.entity.obj.transform.localScale = Vector3.one * (0.1f + (0.9f - (rightClickTime / rightClickDuration)));
+                if (rightClickTime > rightClickDuration)
                 {
-                    Game.instance.world.SetTileInfo(null, removeTile);
+                    if (tile.entity != null)
+                        Game.instance.world.SetTileInfo(null, removeTile);
                     removeTile = -Vector2Int.one;
                 }
             }
             else
             {
-                RightClickTime = 0.0f;
+                rightClickTime = 0.0f;
             }
         }
-        if (hit)
-        {
-            ghost.transform.position = TileUtil.TileToWorldspace(tilePos, TileUtil.TileTransform.Centric);
-            ghost.transform.rotation = Quaternion.LookRotation(TileUtil.IndexTileRotaiton(RotationIndex).toVec3XZ(), Vector3.up);
-            DrawQueue.Add(DrawSphere.Create(pos, 0.4f, Color.red));
-            DrawQueue.Add(DrawArrow.Create(ghost.transform.position + Vector3.up * 1.5f, ghost.transform.position + Vector3.up * 1.5f + TileUtil.IndexTileRotaiton(RotationIndex).toVec3XZ(), Color.red));
-        }
+    }
+
+    public void DebugControls()
+    {
+        //if (Input.GetKeyDown(KeyCode.G))
+        //{
+        //    if (tile.entity != null)
+        //        tile.entity.Direction = tile.entity.Direction;
+        //}
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public struct ResourceInstance
 {
     public GameObject obj;
-    public ResourceInfo info;
+    public ResourceNodeInfo info;
     public int remaining;
     public int size;
 
