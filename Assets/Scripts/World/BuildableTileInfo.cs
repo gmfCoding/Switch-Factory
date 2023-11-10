@@ -9,4 +9,5 @@ public class BuildableTileInfo : TileInfo
     private RecipeCost cost;
 
     public RecipeCost Cost { get => cost; }
+    public bool buildList;
 }

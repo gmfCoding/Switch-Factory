@@ -9,12 +9,12 @@ using UnityEngine.Rendering.RendererUtils;
 
 public class Builder : MonoBehaviour
 {
-
     private static Plane xzPlane = new Plane(Vector3.up, Vector3.zero);
 
     [SerializeField]
     private List<string> placeables;
 
+    bool active;
     public TileInfo selectedInfo;
     private int selected;
     [SerializeField]
@@ -23,7 +23,9 @@ public class Builder : MonoBehaviour
     public GameObject ghost;
     public Material ghostMaterial;
 
-    public TMPro.TMP_Text text;
+    public TMPro.TMP_Text buildItem;
+
+    public TMPro.TMP_Text tileDetails;
 
     public int RotationIndex { 
         get => rotationIndex % 4; 
@@ -42,10 +44,27 @@ public class Builder : MonoBehaviour
         }
     }
 
+    public float RightClickTime
+    {
+        get => rightClickTime;
+        set
+        {
+            rightClickTime = value;
+            //rightClickVis.sizeDelta = new Vector2(5, (rightClickDuration - rightClickTime) * 100);
+            //rightClickVis.sizeDelta = Vector2.right * 5 + Vector2.up * (rightClickTime / rightClickDuration) * 30;
+        }
+    }
+
+    public float rightClickDuration = 0.2f;
+    public RectTransform rightClickVis;
+    private float rightClickTime = 0;
+    public Vector2Int removeTile;
+
+
     public void Start()
     {
         ghost = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        placeables = Game.instance.GetAllAssets<TileInfo>().Select(x => x.Name).ToList();
+        placeables = Game.instance.GetAllAssets<TileInfo>().Where(x => x is BuildableTileInfo b && b.buildList).Select(x => x.Name).ToList();
         SetGhostMesh(Selected);
     }
 
@@ -57,7 +76,7 @@ public class Builder : MonoBehaviour
             ghost = GameObject.CreatePrimitive(PrimitiveType.Cube);
         else
         {
-            text.text = selectedInfo.Name;
+            buildItem.text = selectedInfo.Name;
             ghost = Instantiate(selectedInfo.Model);
         }
         var renderers = ghost.GetComponentsInChildren<MeshRenderer>();
@@ -86,26 +105,44 @@ public class Builder : MonoBehaviour
         return Tile.Empty;
     }
 
+
     public void Update()
     {
         Tile tile = GetTileUnderMouse(out bool hit, out Vector3 pos);
         Vector2Int tilePos = TileUtil.WorldspaceToTile(pos);
-
+        tileDetails.text = tile.ToString();
+        tileDetails.text += tilePos.ToString();
+        if (Input.GetKeyDown(KeyCode.B))
+            active = !active;
+        if (!active)
+            return;
+        bool inverse = Input.GetKey(KeyCode.LeftShift);
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            Selected++;
+            if (inverse)
+                Selected--;
+            else
+                Selected++;
             SetGhostMesh(Selected);
         }
-        if (Input.GetKeyDown(KeyCode.G))
+        // Tile Deletion Change
+        // We moved to a different tile reset the previous tile scale (deletion factor)
+        if (tilePos != removeTile)
         {
-            if (tile.entity != null)
-                tile.entity.Direction = tile.entity.Direction;
+            if (Game.instance.world.GetTileEntity(removeTile) is TileEntity e && e.obj != null)
+                e.obj.transform.localScale = Vector3.one;
+            RightClickTime = 0.0f;
         }
+        //if (Input.GetKeyDown(KeyCode.G))
+        //{
+        //    if (tile.entity != null)
+        //        tile.entity.Direction = tile.entity.Direction;
+        //}
         if (Input.GetKeyDown(KeyCode.R))
         {
             if (tile.IsEmpty())
             {
-                if (Input.GetKeyDown(KeyCode.LeftShift))
+                if (inverse)
                     RotationIndex--;
                 else
                     RotationIndex++;
@@ -116,14 +153,31 @@ public class Builder : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && tile.entity == null)
         {
             TileInfo selectedTile = Game.instance.GetAsset<TileInfo>(placeables[Selected]);
-            Game.instance.world.SetTile(selectedTile, tilePos);
+            Game.instance.world.SetTileInfo(selectedTile, tilePos);
             var entity = Game.instance.world.GetTileEntity(tilePos);
             if (entity != null)
                 entity.Direction = TileUtil.IndexTileRotaiton(RotationIndex);
         }
-        else if (Input.GetMouseButtonDown(1) && tile.entity != null)
+        else
         {
-            Game.instance.world.SetTile(null, tilePos);
+            // Tile deletion, hold over a tile for 0.2 (default seconds) to delete.
+            // When the user moves on to the next tile before this one is deleted it will  start deleting that tile from T = 0. SEE Tile Deletion Change
+            if (Input.GetMouseButton(1) && tile.entity != null && Game.instance.world.InBounds(tilePos))
+            {
+                removeTile = tilePos;
+                RightClickTime += Time.deltaTime;
+                // The longer we hold for the smaller the tile will be (once it reach size zero it will be deleted)
+                tile.entity.obj.transform.localScale = Vector3.one * (1f - (RightClickTime / rightClickDuration));
+                if (RightClickTime > rightClickDuration)
+                {
+                    Game.instance.world.SetTileInfo(null, removeTile);
+                    removeTile = -Vector2Int.one;
+                }
+            }
+            else
+            {
+                RightClickTime = 0.0f;
+            }
         }
         if (hit)
         {

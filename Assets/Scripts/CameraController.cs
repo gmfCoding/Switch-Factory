@@ -16,7 +16,10 @@ public class CameraController : MonoBehaviour
     private float rotationX = 0;
     private Vector3 currentRotation;
     [SerializeField] private Vector2 rotationXMinMax = new Vector2(-0, 90);
-    [SerializeField] private Vector2 rotationStartPos = new Vector2(-0, 90);
+    [SerializeField] private Vector2 rotationStartPos = new Vector2(-0, 90);    public void Start()
+    {
+        rotationX = rotor.localEulerAngles.x;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -44,6 +47,7 @@ public class CameraController : MonoBehaviour
             follow.eulerAngles += new Vector3(0, mouseX, 0);
         }
         wish.Normalize();
-        follow.position += wish * speed * Time.deltaTime;
+        if (Game.instance.world.GetTile((follow.position + wish / 8.0f + Vector3.forward * 0.5f + Vector3.right * 0.5f).WorldToTile()).type == TileBase.Floor)
+            follow.position += wish * speed * Time.deltaTime;
     }
 }

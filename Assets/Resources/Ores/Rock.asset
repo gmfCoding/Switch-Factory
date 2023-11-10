@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5686fb8e0b7c54a4e9fdf48d4308ad03, type: 3}
-  m_Name: IronOre
+  m_Name: Rock
   m_EditorClassIdentifier: 
-  name: resource_iron_ore
-  description: Mine this resource to get Iron Ore.
+  name: resource_rock
+  description: 
   randomise: 1
-  min: 2134
-  max: 4658
-  gatherModes: 0
+  min: 1000
+  max: 2000
+  gatherModes: -1
   spawnInfo:
-    type: 1
-    size: 250
+    type: 0
+    size: 0
     offsetX: 0
     offsetY: 0
     chance: 0
-  Model: {fileID: 3909965223046271843, guid: f0b4c23e3a8e9bc45bfe39adcd2de790, type: 3}
+  Model: {fileID: 919132149155446097, guid: c931464c368591e4c8c80344a107ff45, type: 3}

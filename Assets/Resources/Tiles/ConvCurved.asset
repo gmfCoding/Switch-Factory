@@ -22,4 +22,8 @@ MonoBehaviour:
     m_AssemblyQualifiedName: 
     m_AssemblyName: 
   height: 0
+  span: {x: 1, y: 1}
+  cost:
+    cost: []
+  buildList: 1
   direction: {x: 1, y: 0}

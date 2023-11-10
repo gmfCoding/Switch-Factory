@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4c34d6fa12da3b4187c4398a98790eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 80287d7a36aee0b4192c729c442b54b4, type: 3}
   m_Name: ItemConsumer
   m_EditorClassIdentifier: 
   name: item_consumer
@@ -22,3 +22,7 @@ MonoBehaviour:
     m_AssemblyQualifiedName: 
     m_AssemblyName: 
   height: 0.25
+  span: {x: 1, y: 1}
+  cost:
+    cost: []
+  buildList: 1

@@ -28,5 +28,6 @@ MonoBehaviour:
     - item: {fileID: 11400000, guid: 126e91a314829674d9432b34e440c5c7, type: 2}
       amount: 10
       transform: {fileID: 0}
+  buildList: 1
   cycle: 40
   capacity: 1

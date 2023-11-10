@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "convTile.asset", menuName = "Game/Tiles/ConveyorTile")]
-public class ConveyorTileInfo : TileInfo
+public class ConveyorTileInfo : BuildableTileInfo
 {
     [SerializeField]
     private Vector2Int direction;

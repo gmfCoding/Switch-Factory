@@ -68,18 +68,18 @@ public class World : MonoBehaviour
 
     public void GenerateResources()
     {
-        var res = Game.instance.GetAsset<ResourceInfo>("resource_iron_ore");
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                var s = Mathf.PerlinNoise((x * scale) + offsetX, (y * scale) + offsetY);
-                if (s > 0.9)
-                {
-                    SetTileResource(res, new Vector2Int(x, y));
-                }
-            }
-        }
+        //var res = Game.instance.GetAsset<ResourceInfo>("resource_iron_ore");
+        //for (int y = 0; y < height; y++)
+        //{
+        //    for (int x = 0; x < width; x++)
+        //    {
+        //        var s = Mathf.PerlinNoise((x * scale) + offsetX, (y * scale) + offsetY);
+        //        if (s > 0.9)
+        //        {
+        //            SetTileResource(res, new Vector2Int(x, y));
+        //        }
+        //    }
+        //}
     }
 
     public TileEntity GetTileEntity(Vector2Int pos)
@@ -106,15 +106,11 @@ public class World : MonoBehaviour
         tile.resource = new ResourceInstance();
         tiles[pos.y, pos.x] = tile;
     }
-
-    public TileEntity SetTile(TileInfo info, Vector2Int pos)
+    public bool SetTile(Tile tile, Vector2Int pos)
     {
         if (!InBounds(pos))
-            return null;
+            return false;
         ClearTile(pos);
-        if (info == null)
-            return null;
-        Tile tile = info.Create();
         if (tile.entity != null)
         {
             tile.entity.pos = pos;
@@ -122,11 +118,22 @@ public class World : MonoBehaviour
             if (tile.entity is ITickable)
                 tickables.Add(tile.entity as ITickable);
             tile.entity.OnEntityCreate();
-            
         }
         tiles[pos.y, pos.x] = tile;
         if (tile.entity != null && tile.entity.obj != null)
             tile.entity.obj.GetComponent<TileCallback>()?.OnCreated(this, pos);
+        return true;
+    }
+
+    public TileEntity SetTileInfo(TileInfo info, Vector2Int pos)
+    {
+        if (!InBounds(pos))
+            return null;
+        ClearTile(pos);
+        if (info == null)
+            return null;
+        Tile tile = info.Create();
+        SetTile(tile, pos);
         return tile.entity;
     }
 
@@ -228,7 +235,7 @@ public class World : MonoBehaviour
                 var hasEntity = rd.ReadBoolean();
                 var hasTile = rd.ReadBoolean();
                 if (hasTile)
-                    SetTile(Game.instance.GetAsset<TileInfo>(rd.ReadString()), pos);
+                    SetTileInfo(Game.instance.GetAsset<TileInfo>(rd.ReadString()), pos);
                 if (hasResource)
                 {
                     tiles[y, x].resource.info = Game.instance.GetAsset<ResourceInfo>(rd.ReadString());

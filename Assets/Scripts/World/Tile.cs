@@ -76,8 +76,11 @@ public struct Tile
         return HashCode.Combine(resource.info, tile, type, entity);
     }
 
-    internal void Write(BinaryWriter wr)
+    public override string ToString()
     {
-        
+        return $"type:{type}\n" +
+            $"resource:{(resource.info != null ? resource.info.Name : "none")}\n" +
+            $"entity:{(entity != null ? entity.Info.Name : "none")}\n" +
+            $"tile:{(tile != null ? tile.Name : "none")}\n";
     }
 }
