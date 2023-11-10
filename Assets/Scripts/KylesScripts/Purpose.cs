@@ -11,8 +11,6 @@ public class Purpose : MonoBehaviour
     public int switchCount = 0;
     public int switchesNeededToFollow  = 1;
     private bool takeCommandFromMaster = false;
-    //private bool setA = false;
-    //private bool setB = false;
     private int clickCounter = 0;
 
     private void Update()
@@ -35,9 +33,10 @@ public class Purpose : MonoBehaviour
             }
         }
     }
+
     void HandleMouseInput()
     {
-        if (Input.GetMouseButtonDown(1)) // Right mouse button
+        if (Input.GetMouseButtonDown(1))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
