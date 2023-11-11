@@ -21,13 +21,14 @@ public class Purpose : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Switch"))
+        if (other.CompareTag("Token"))
         {
             Destroy(other.gameObject);
             switchCount++;
             if (switchCount >= switchesNeededToFollow)
             {
                 patrolScript.enabled = false;
+                putToWorkScript.enabled = false;
                 followPlayerScript.enabled = true;
                 takeCommandFromMaster = true;
             }
@@ -36,7 +37,7 @@ public class Purpose : MonoBehaviour
 
     void HandleMouseInput()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -45,13 +46,18 @@ public class Purpose : MonoBehaviour
             {
                 if (clickCounter == 0)
                 {
-                    putToWorkScript.pointA.position = hit.point;
+                    Vector3 newPointA = hit.point;
+                    newPointA.y = 0;
+                    putToWorkScript.pointA.position = newPointA;
                     clickCounter++;
                 }
                 else if (clickCounter == 1)
                 {
-                    putToWorkScript.pointB.position = hit.point;
+                    Vector3 newPointB = hit.point;
+                    newPointB.y = 0;
+                    putToWorkScript.pointB.position = newPointB;
                     clickCounter = 0;
+                    patrolScript.enabled = false;
                     followPlayerScript.enabled = false;
                     putToWorkScript.enabled = true;
                     takeCommandFromMaster = false;

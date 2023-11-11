@@ -19,7 +19,8 @@ public class Patrol : MonoBehaviour
     private void Start()
     {
         waitTime = startWaitTime;
-        moveSpot.position = new Vector3(Random.Range(minX, maxX), this.transform.position.y, Random.Range(minZ, maxZ));
+        moveSpot.position = new Vector3(Random.Range(minX, maxX), 0, Random.Range(minZ, maxZ));//having the y at 0 insures the move spot doent underground
+        //moveSpot.position = new Vector3(Random.Range(minX, maxX), this.transform.position.y, Random.Range(minZ, maxZ));
 
     }
     private void Update()
@@ -30,7 +31,8 @@ public class Patrol : MonoBehaviour
         {
             if (waitTime <= 0)
             {
-                moveSpot.position = new Vector3(Random.Range(minX, maxX), this.transform.position.y, Random.Range(minZ, maxZ));
+                //moveSpot.position = new Vector3(Random.Range(minX, maxX), this.transform.position.y, Random.Range(minZ, maxZ));
+                moveSpot.position = new Vector3(Random.Range(minX, maxX), 0, Random.Range(minZ, maxZ));
                 waitTime = startWaitTime;
             }
             else

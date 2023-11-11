@@ -15,6 +15,9 @@ public class PutToWork : MonoBehaviour
         Vector3 targetPosition = GetCurrentDestination();
         targetPosition.y = transform.position.y; // Maintain the current y-coordinate
 
+        targetPosition.y = 0;
+
+
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, targetPosition) < 0.2f)
