@@ -33,6 +33,11 @@ public class Purpose : MonoBehaviour
                 takeCommandFromMaster = true;
             }
         }
+        if (other.CompareTag("Grabable"))
+        {
+
+
+        }
     }
 
     void HandleMouseInput()
