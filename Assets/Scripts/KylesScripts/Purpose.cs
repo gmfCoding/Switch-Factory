@@ -25,7 +25,6 @@ public class Purpose : MonoBehaviour
         {
             Destroy(other.gameObject);
             switchCount++;
-            Debug.Log("ARE WE HERERERE");
             if (switchCount >= switchesNeededToFollow)
             {
                 patrolScript.enabled = false;
