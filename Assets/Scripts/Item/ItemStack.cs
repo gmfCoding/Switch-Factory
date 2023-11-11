@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class ItemStack
+public class ItemStack : IProvider<ItemStack>
 {
     public ItemInfo item;
     public int amount;
@@ -121,5 +121,10 @@ public class ItemStack
             return item.Amount;
         else
             return item.Amount - this.Amount;
+    }
+
+    public ItemStack Get()
+    {
+        return this;
     }
 }

@@ -63,7 +63,7 @@ public class Conveyor : TileEntity, IItemContainer, ITickable
                     queue.Remove(rem);
                 }
                 else if (took)
-                    queue[i].item.Amount -= taken;
+                    queue[i].item = queue[i].item.Split(taken);
             }
         }
     }
