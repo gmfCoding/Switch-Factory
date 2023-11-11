@@ -38,6 +38,11 @@ public class ResourceNodeInfo : AssetInfo
     [Range(0, 8000)]
     public short max;
 
+    public bool protection;
+    public int protectionDetail;
+    public int protectionRadius;
+    public GameObject protector;
+
     public static List<ResourceNodeInfo> data = new List<ResourceNodeInfo>();
     public static Dictionary<ResourceNodeInfo, byte> id = new Dictionary<ResourceNodeInfo, byte>();
 

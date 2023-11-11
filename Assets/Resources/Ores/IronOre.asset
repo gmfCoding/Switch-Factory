@@ -17,7 +17,11 @@ MonoBehaviour:
   randomise: 1
   min: 1519
   max: 1851
-  gatherModes: 0
+  protection: 1
+  protectionDetail: 10
+  protectionRadius: 6
+  protector: {fileID: 7093274381810304300, guid: 8434f5569d71ff9428f66c57f8bf1f6d, type: 3}
+  gatherModes: -1
   spawnInfo:
     type: 1
     size: 250

@@ -63,7 +63,8 @@ public class WorldGen : MonoBehaviour
                         }
                         else if (Game.instance.world.IsNearGroupInstance(ResourceGroup.Patch, new Vector2Int(x, y), 15))
                             continue;
-                         Game.instance.world.AddResourceNode(all[i], new Vector2Int(x, y), Vector2Int.right);
+                         var inst = Game.instance.world.AddResourceNode(all[i], new Vector2Int(x, y), Vector2Int.right);
+                        inst.OnCreate();
                     }
                 }
             }
