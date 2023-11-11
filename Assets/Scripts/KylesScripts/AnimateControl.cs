@@ -4,36 +4,74 @@ using UnityEngine;
 
 public class AnimateControl : MonoBehaviour
 {
+    public Transform targetTransform;
     public Animator animator;
+    public Patrol patrolScript;
+    public PutToWork putToWorkScript;
+    public FollowPlayer followPlayerScript;
     private Vector3 previousPosition;
-
     public float movementState = 0.1f;
+    private BoxCollider boxCollider;
+    private bool brawlTriggered = false;
+    public int timeUntilNextFight = 50;
 
     void Start()
     {
-        previousPosition = transform.position;
+        previousPosition = targetTransform.position;
+        boxCollider = GetComponent<BoxCollider>();
     }
 
     void Update()
     {
-        // Calculate movement based on change in position
-        Vector3 movement = transform.position - previousPosition;
-
-        // Check if the object is moving
+        Vector3 movement = targetTransform.position - previousPosition;
         if (movement.magnitude > movementState)
         {
-            // Set the animation state to "Walking"
-            animator.SetBool("Walking", true);
-            animator.SetBool("Idle", false);
+            animator.SetBool("IsMoving", true);
+            Debug.Log("  IS MOVING == TRUE");
         }
         else
         {
-            // Set the animation state to "Idle"
-            animator.SetBool("Walking", false);
-            animator.SetBool("Idle", true);
+            animator.SetBool("IsMoving", false);
+            Debug.Log("  IS MOVING == false");
         }
-
-        // Update previous position
         previousPosition = transform.position;
+    }
+void OnTriggerEnter(Collider other)
+{
+    if (brawlTriggered == false)
+    {
+        if (other.CompareTag("Demon"))
+        {
+            boxCollider.enabled = false;
+            brawlTriggered = true;
+            patrolScript.enabled = false;
+            putToWorkScript.enabled = false;
+            followPlayerScript.enabled = false;
+
+            if (this.transform.position.x > other.transform.position.x)
+            {
+                animator.SetTrigger("BrawlWin");
+            }
+            else
+            {
+                animator.SetTrigger("BrawlLose");
+            }
+            transform.LookAt(other.transform);
+            other.transform.LookAt(transform);
+            StartCoroutine(EnableBrawl());
+        }
+    }
+}
+    public void EnableScripts()
+    {
+        patrolScript.enabled = true;
+        animator.SetBool("IsMoving", true);
+        StartCoroutine(EnableBrawl());
+    }
+    IEnumerator EnableBrawl()
+    {
+        yield return new WaitForSeconds(timeUntilNextFight);
+        boxCollider.enabled = true;
+        brawlTriggered = false;
     }
 }
