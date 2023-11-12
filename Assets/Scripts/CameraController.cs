@@ -14,28 +14,42 @@ public class CameraController : MonoBehaviour
 
     private float rotationY = 0;
     private float rotationX = 0;
-    private Vector3 currentRotation;
+    private Vector3 currentRotation;
+    public Animator animator;
     [SerializeField] private Vector2 rotationXMinMax = new Vector2(-0, 90);
     [SerializeField] private Vector2 rotationStartPos = new Vector2(-0, 90);    public void Start()
     {
         rotationX = rotor.localEulerAngles.x;
+        animator.SetBool("IsPlayer", true);
     }
-    // Update is called once per frame
-    void Update()
+    
+
+// Update is called once per frame
+void Update()
     {
+
         Vector3 forward;
         Vector3 wish = Vector3.zero;
         forward = Vector3.Cross(Camera.main.transform.right, Vector3.up);
         if (Input.GetKey(KeyCode.A))
+        {
+            animator.SetBool("Forward", true);
             wish -= Camera.main.transform.right;
+        }
         if (Input.GetKey(KeyCode.D))
+        {
             wish += Camera.main.transform.right;
+        }
         if (Input.GetKey(KeyCode.W))
+        {
             wish += forward;
+        }
         if (Input.GetKey(KeyCode.S))
+        {
             wish -= forward;
+        }
 
-        if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(1))
+            if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(1))
         {
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
