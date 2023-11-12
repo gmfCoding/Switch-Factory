@@ -61,7 +61,9 @@ public class SpawnConveyorExample : MonoBehaviour
 
     public void DefaultSetup()
     {
+        //var prod = world.SetTileInfo(TileInfo.GetTile("importer"), new Vector2Int(offset.x++, offset.y)) as ItemProducer;
         var prod = world.SetTileInfo(TileInfo.GetTile("item_producer"), new Vector2Int(offset.x++, offset.y)) as ItemProducer;
+
         prod.itemName = "item_iron_ore";
         prod.Direction = Vector2Int.right;
 
@@ -72,11 +74,13 @@ public class SpawnConveyorExample : MonoBehaviour
 
         var _4 = world.SetTileInfo(TileInfo.GetTile("smelter"), new Vector2Int(offset.x++, offset.y)) as MachineBase;
         var _5 = world.SetTileInfo(TileInfo.GetTile("inserter"), new Vector2Int(offset.x++, offset.y)) as Inserter;
-        CreateConveyor(new Vector2Int(offset.x++, offset.y), Vector2Int.left);
+        CreateConveyor(new Vector2Int(offset.x++, offset.y), Vector2Int.right);
         var _6 = world.SetTileInfo(TileInfo.GetTile("machine_press"), new Vector2Int(offset.x++, offset.y)) as MachineBase;
-        CreateConveyor(new Vector2Int(offset.x++, offset.y), Vector2Int.left);
+        CreateConveyor(new Vector2Int(offset.x++, offset.y), Vector2Int.right);
         var _7 = world.SetTileInfo(TileInfo.GetTile("inserter"), new Vector2Int(offset.x++, offset.y)) as Inserter;
         var _8 = world.SetTileInfo(TileInfo.GetTile("machine_assembler"), new Vector2Int(offset.x++, offset.y)) as MachineBase;
+        var _i5 = world.SetTileInfo(TileInfo.GetTile("inserter"), new Vector2Int(offset.x, offset.y)) as Inserter;
+        var _11 = world.SetTileInfo(TileInfo.GetTile("exporter"), new Vector2Int(offset.x + 1, offset.y)) as MachineBase;
 
         offset.y--;
         offset.x--;

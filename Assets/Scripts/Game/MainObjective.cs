@@ -8,8 +8,10 @@ public class MainObjective : MonoBehaviour
     private int tokens;
     public int winAmount;
 
-    RectTransform winPanel;
-    TMPro.TMP_Text tokenText;
+    public static MainObjective instance;
+
+    public RectTransform winPanel;
+    public TMPro.TMP_Text tokenText;
 
     bool winConditionRate;
 
@@ -19,18 +21,22 @@ public class MainObjective : MonoBehaviour
         get => tokens;
         set 
         {
-            tokenText.text = value.ToString();
+            tokenText.text = "Tridents Produced:" + value.ToString();
             tokens = value; 
         }
     }
     public float sampleTime = 20.0f;
     public float time = 0.0f;
 
+    public void Awake()
+    {
+        instance = this;
+    }
+
     public void Update()
     {
         if (hasWon)
             return;
-
         if (winConditionRate)
         {
             time += Time.deltaTime;
