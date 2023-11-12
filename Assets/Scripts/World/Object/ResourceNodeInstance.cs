@@ -8,6 +8,7 @@ public class ResourceNodeInstance : MonoBehaviour
     private Vector2Int direction;
     [SerializeField]
     private Vector2Int position;
+    public GameObject objectResoucePrefab;
 
     public ResourceNodeInfo info;
 
@@ -47,11 +48,34 @@ public class ResourceNodeInstance : MonoBehaviour
         }
     }
 
-    public void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Player")
-        { 
-            // Scare away player
+        if (other.CompareTag("Demon"))
+        {
+            GameObject heldObject = Instantiate(objectResoucePrefab, transform.position, Quaternion.identity);
+            Transform handTransform = FindChildRecursive(other.gameObject.transform, "hold");
+            heldObject.transform.parent = handTransform;
+            heldObject.transform.localPosition = Vector3.zero;
+
         }
+    }
+
+    Transform FindChildRecursive(Transform parent, string childName)
+    {
+        Transform result = parent.Find(childName);
+
+        if (result != null)
+        {
+            return result;
+        }
+        foreach (Transform child in parent)
+        {
+            result = FindChildRecursive(child, childName);
+            if (result != null)
+            {
+                break;
+            }
+        }
+        return result;
     }
 }

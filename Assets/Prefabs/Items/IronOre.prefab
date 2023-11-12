@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3909965223046271844}
+  - component: {fileID: 5135702396446402833}
+  - component: {fileID: -6918458216246425756}
   m_Layer: 0
   m_Name: IronOre
   m_TagString: Untagged
@@ -36,6 +38,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5135702396446402833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3909965223046271843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a402d87f16a2bdb4491446ff87f2ff02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item:
+    item: {fileID: 11400000, guid: 02cf5ffa2c616414e92cd6093bb492dd, type: 2}
+    amount: 1
+    transform: {fileID: 3909965223046271844}
+--- !u!65 &-6918458216246425756
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3909965223046271843}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3909965223678548129
 GameObject:
   m_ObjectHideFlags: 0
