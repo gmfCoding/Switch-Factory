@@ -15,6 +15,8 @@ public class AnimateControl : MonoBehaviour
     private bool brawlTriggered = false;
     public int timeUntilNextFight = 50;
 
+    public bool brawlAllowed = true;
+
     void Start()
     {
         previousPosition = targetTransform.position;
@@ -27,40 +29,38 @@ public class AnimateControl : MonoBehaviour
         if (movement.magnitude > movementState)
         {
             animator.SetBool("IsMoving", true);
-            Debug.Log("  IS MOVING == TRUE");
         }
         else
         {
             animator.SetBool("IsMoving", false);
-            Debug.Log("  IS MOVING == false");
         }
         previousPosition = transform.position;
     }
-void OnTriggerEnter(Collider other)
-{
-    if (brawlTriggered == false)
+    void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Demon"))
+        if (brawlAllowed && brawlTriggered == false)
         {
-            boxCollider.enabled = false;
-            brawlTriggered = true;
-            patrolScript.enabled = false;
-            putToWorkScript.enabled = false;
-            followPlayerScript.enabled = false;
+            if (other.CompareTag("Demon"))
+            {
+                boxCollider.enabled = false;
+                brawlTriggered = true;
+                patrolScript.enabled = false;
+                putToWorkScript.enabled = false;
+                followPlayerScript.enabled = false;
 
-            if (this.transform.position.x > other.transform.position.x)
-            {
-                animator.SetTrigger("BrawlWin");
+                if (this.transform.position.x > other.transform.position.x)
+                {
+                    animator.SetTrigger("BrawlWin");
+                }
+                else
+                {
+                    animator.SetTrigger("BrawlLose");
+                }
+                transform.LookAt(other.transform);
+                other.transform.LookAt(transform);
+                StartCoroutine(EnableBrawl());
             }
-            else
-            {
-                animator.SetTrigger("BrawlLose");
-            }
-            transform.LookAt(other.transform);
-            other.transform.LookAt(transform);
-            StartCoroutine(EnableBrawl());
         }
-    }
 }
     public void EnableScripts()
     {

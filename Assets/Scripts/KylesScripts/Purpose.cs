@@ -40,6 +40,8 @@ public class Purpose : MonoBehaviour
         }
     }
 
+    private static Plane xzPlane = new Plane(Vector3.up, Vector3.zero);
+
     void HandleMouseInput()
     {
         if (Input.GetMouseButtonDown(0))
@@ -47,20 +49,16 @@ public class Purpose : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag("Ground"))
+            if (xzPlane.Raycast(ray, out float enter))
             {
                 if (clickCounter == 0)
                 {
-                    Vector3 newPointA = hit.point;
-                    newPointA.y = 0;
-                    putToWorkScript.pointA.position = newPointA;
+                    putToWorkScript.pointA.position = ray.GetPoint(enter);
                     clickCounter++;
                 }
                 else if (clickCounter == 1)
                 {
-                    Vector3 newPointB = hit.point;
-                    newPointB.y = 0;
-                    putToWorkScript.pointB.position = newPointB;
+                    putToWorkScript.pointB.position = ray.GetPoint(enter);
                     clickCounter = 0;
                     patrolScript.enabled = false;
                     followPlayerScript.enabled = false;
