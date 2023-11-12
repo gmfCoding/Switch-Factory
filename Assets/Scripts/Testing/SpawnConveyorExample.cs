@@ -61,11 +61,11 @@ public class SpawnConveyorExample : MonoBehaviour
 
     public void DefaultSetup()
     {
-        //var prod = world.SetTileInfo(TileInfo.GetTile("importer"), new Vector2Int(offset.x++, offset.y)) as ItemProducer;
-        var prod = world.SetTileInfo(TileInfo.GetTile("item_producer"), new Vector2Int(offset.x++, offset.y)) as ItemProducer;
+        var prod = world.SetTileInfo(TileInfo.GetTile("importer"), new Vector2Int(offset.x++, offset.y)) as ItemProducer;
+        //var prod = world.SetTileInfo(TileInfo.GetTile("item_producer"), new Vector2Int(offset.x++, offset.y)) as ItemProducer;
 
-        prod.itemName = "item_iron_ore";
-        prod.Direction = Vector2Int.right;
+        //prod.itemName = "item_iron_ore";
+        //prod.Direction = Vector2Int.right;
 
         CreateConveyor(new Vector2Int(offset.x++, offset.y), Vector2Int.up);
         var _1 = world.SetTileInfo(TileInfo.GetTile("inserter"), new Vector2Int(offset.x++, offset.y)) as Inserter;
