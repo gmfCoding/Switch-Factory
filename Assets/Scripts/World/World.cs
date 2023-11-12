@@ -138,7 +138,6 @@ public class World : MonoBehaviour
             entities.Add(tile.entity);
             if (tile.entity is ITickable)
                 tickables.Add(tile.entity as ITickable);
-            tile.entity.Direction = Vector2Int.right;
             tile.entity.OnEntityCreate();
         }
         tiles[pos.y, pos.x] = tile;
