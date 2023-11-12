@@ -26,6 +26,11 @@ public class TileInfo : AssetInfo
 
     public Vector2Int span = Vector2Int.one;
 
+    [Header("Machine Info")]
+    public List<ItemRecipeInfo> recipes;
+    public bool canConveyorOutput;
+    public bool canConveyorInput;
+
     public virtual Tile Create()
     { 
         Tile tile = new Tile();
@@ -39,6 +44,5 @@ public class TileInfo : AssetInfo
         }
         return (tile);
     }
-
     public static TileInfo GetTile(string name) => Game.instance.GetAsset<TileInfo>(name);
 }

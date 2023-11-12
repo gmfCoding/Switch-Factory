@@ -18,11 +18,15 @@ MonoBehaviour:
   placement: 1
   directional: 1
   systemType:
-    m_Name: Smelter
+    m_Name: MachineBase
     m_AssemblyQualifiedName: 
     m_AssemblyName: 
   height: 0
   span: {x: 1, y: 1}
+  recipes:
+  - {fileID: 11400000, guid: 8be2b5e2a69d501458422f4af8eb6d73, type: 2}
+  canConveyorOutput: 0
+  canConveyorInput: 0
   cost:
     cost: []
   buildList: 1

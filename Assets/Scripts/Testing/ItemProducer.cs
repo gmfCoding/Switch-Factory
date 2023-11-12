@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ItemProducer : TileEntity, ITickable, IItemContainer
 {
-    public string itemName = "iron_ore";
+    public string itemName = "item_iron_ore";
     bool enabled = true;
 
     public static World world = Game.instance.world;

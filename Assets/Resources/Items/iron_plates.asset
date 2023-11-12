@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca6047a97d70cf54abbb4da9064d78f9, type: 3}
   m_Name: iron_plates
   m_EditorClassIdentifier: 
-  name: iron_plate
+  name: item_iron_plate
   description: Iron Plate
-  model: {fileID: 7093274381810304300, guid: 8434f5569d71ff9428f66c57f8bf1f6d, type: 3}
+  model: {fileID: 3909965223046271843, guid: 5841927ff6a72e54ab9a44c8d88aec9c, type: 3}
+  maxStack: 100
