@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5686fb8e0b7c54a4e9fdf48d4308ad03, type: 3}
+  m_Name: IronOre
+  m_EditorClassIdentifier: 
+  name: resource_iron_ore
+  description: Mine this resource to get Iron Ore.
+  randomise: 1
+  min: 1519
+  max: 1851
+  protection: 1
+  protectionDetail: 10
+  protectionRadius: 6
+  protector: {fileID: 7093274381810304300, guid: 8434f5569d71ff9428f66c57f8bf1f6d, type: 3}
+  gatherModes: -1
+  spawnInfo:
+    type: 1
+    size: 250
+    offsetX: 0
+    offsetY: 0
+    chance: 0.05
+  Model: {fileID: 639162988296497626, guid: 715990a40b7e526498b8302f735ec05d, type: 3}

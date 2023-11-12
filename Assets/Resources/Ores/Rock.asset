@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5686fb8e0b7c54a4e9fdf48d4308ad03, type: 3}
+  m_Name: Rock
+  m_EditorClassIdentifier: 
+  name: 
+  description: 
+  randomise: 0
+  min: 0
+  max: 0
+  gatherModes: 5
+  spawnInfo:
+    type: 0
+    size: 0
+    offsetX: 0
+    offsetY: 0
+    chance: 0.3
+  Model: {fileID: 4210812533955259219, guid: 9c55fd45e9d8fac4ebaf5bd780ec89c2, type: 3}

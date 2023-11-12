@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "recipe.asset", menuName = "Game/Recipe", order = 1)]
-public class ItemRecipeInfo : ScriptableObject
+public class ItemRecipeInfo : AssetInfo
 {
-    public new string name;
-    public string description;
+    [SerializeField]
+    private List<ItemStack> input;
+    [SerializeField]
+    private List<ItemStack> output;
 
-    public List<Item> input;
-    public List<Item> output;
+    public List<ItemStack> Input { get => input; }
+    public List<ItemStack> Output { get => output; }
+
+    public int time;
 }

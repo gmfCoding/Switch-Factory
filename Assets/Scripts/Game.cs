@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -52,8 +51,27 @@ public class Game : MonoBehaviour
         AssetInfo[] loaded = Resources.LoadAll<AssetInfo>("");
         foreach (var item in loaded)
         {
-            assets.Add(item.name, item);
+            assets.Add(item.Name, item);
+            if (item is SmelterRecipeInfo sri)
+                SmelterRecipeInfo.recipes.Add(sri);
+            else if (item is ResourceNodeInfo ri)
+            {
+                ResourceNodeInfo.data.Add(ri);
+            }
         }
+        for (byte i = 0; i < ResourceNodeInfo.data.Count; i++)
+            ResourceNodeInfo.id.Add(ResourceNodeInfo.data[i], i);
         isLoaded = true;
+    }
+
+    internal List<T> GetAllAssets<T>() where T : AssetInfo, new()
+    {
+        List<T> list = new List<T>();
+        foreach (var item in assets)
+        {
+            if (item.Value is T t)
+                list.Add(t);
+        }
+        return list;
     }
 }

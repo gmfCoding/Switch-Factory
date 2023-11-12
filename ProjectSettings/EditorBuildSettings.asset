@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Conveyor.unity
+    guid: a5a96800768266542a93e30f75f74d01
+  - enabled: 1
+    path: Assets/Scenes/TitleScreen.unity
+    guid: ae3df17cff700b44c8b4a3715446e1c1
+  - enabled: 1
+    path: Assets/Scenes/kyle new playground.unity
+    guid: 008047a2cf511254489ab68cabfb74c2
   m_configObjects: {}
