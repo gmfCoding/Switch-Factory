@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IronOreResourcePrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 2564503674229345679, guid: 3f7c26f4287d0254ea8877241b7670a7, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2944547310273533749, guid: 3f7c26f4287d0254ea8877241b7670a7, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -55,6 +59,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3411366014946223415, guid: 3f7c26f4287d0254ea8877241b7670a7, type: 3}
+      propertyPath: objectResoucePrefab
+      value: 
+      objectReference: {fileID: 3909965223046271843, guid: 523c176e89bdc214c93ad0067b607e71, type: 3}
     - target: {fileID: 6261395475188860974, guid: 3f7c26f4287d0254ea8877241b7670a7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -132,6 +140,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 466df072904da1f4ea45986a8345c62b, type: 3}
       propertyPath: m_Name
       value: Node
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 466df072904da1f4ea45986a8345c62b, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 466df072904da1f4ea45986a8345c62b, type: 3}
