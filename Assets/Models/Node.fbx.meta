@@ -1,24 +1,9 @@
 fileFormatVersion: 2
-guid: c61e55b425ac8c543983c13a3fe3e64d
+guid: 466df072904da1f4ea45986a8345c62b
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Ground.001
-    second: {fileID: 2100000, guid: 54211a72aff31854783c57addab00049, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Pebble.001
-    second: {fileID: 2100000, guid: cb6778e12c956974a91f9241786a900d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Rock.001
-    second: {fileID: 2100000, guid: 74b0fa3f8c51fdd42a36db6181f0e43e, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
