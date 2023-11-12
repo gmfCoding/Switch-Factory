@@ -39,10 +39,19 @@ public class MachineBase : TileEntity, IItemContainer, ITickable
 
     public void CompressInput()
     {
-        queue = queue
-        .GroupBy(item => item.item)
-        .Select(group => new ItemStack(group.Key,group.Sum(item => item.Amount)))
-        .ToList();
+        var groups = queue.GroupBy(item => item.item);
+        List<ItemStack> items = new List<ItemStack>();
+        foreach (var group in groups)
+        {
+            int sum = group.Sum(item => item.Amount);
+            while (sum > 0)
+            {
+                items.Add(new ItemStack(group.Key, sum));
+                sum -= group.Key.maxStack;
+            }
+        }
+        queue.Clear();
+        queue = items;
     }
 
     public virtual void Tick()
@@ -111,6 +120,8 @@ public class MachineBase : TileEntity, IItemContainer, ITickable
 
     public bool CanAdd(ItemStack stack)
     {
+        if (queue.Sum(x => x.item == stack.item ? x.Amount : 0) > 10)
+            return false;
         if (recipe == null)
             return false;
         return stack != null && queue.Count <= recipe.Input.Count;

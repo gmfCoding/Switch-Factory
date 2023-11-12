@@ -596,6 +596,7 @@ GameObject:
   - component: {fileID: 6746970218183604497}
   - component: {fileID: 6746970218183604496}
   - component: {fileID: 6746970218183604503}
+  - component: {fileID: 4946187826805897202}
   m_Layer: 0
   m_Name: Demon (1)
   m_TagString: Demon
@@ -660,6 +661,7 @@ MonoBehaviour:
   followPlayerScript: {fileID: 6746970218183604497}
   movementState: 0.001
   timeUntilNextFight: 50
+  brawlAllowed: 1
 --- !u!65 &6746970218183604508
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -742,6 +744,7 @@ MonoBehaviour:
   maxX: 9
   minZ: -9
   maxZ: 9
+  centerTransform: {fileID: 6746970217983717831}
 --- !u!54 &6746970218183604503
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -758,6 +761,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!205 &4946187826805897202
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6746970218183604501}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: -0.017600596, y: 1.0710392, z: -0.0065881014}
+  m_Size: 66.5
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.19249678
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 6746970218761761222}
+  m_Enabled: 1
 --- !u!1 &6746970218192166750
 GameObject:
   m_ObjectHideFlags: 0

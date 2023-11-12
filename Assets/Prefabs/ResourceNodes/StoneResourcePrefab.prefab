@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4460101632791697745}
   - component: {fileID: 4210812533955259219}
+  - component: {fileID: 3684911644536523024}
   m_Layer: 0
   m_Name: StoneResourcePrefab
   m_TagString: Untagged
@@ -47,7 +48,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0}
   position: {x: 0, y: 0}
+  objectResoucePrefab: {fileID: 0}
   info: {fileID: 11400000, guid: 4e70a76e68174964dbf5533d46748803, type: 2}
+--- !u!205 &3684911644536523024
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3940269661517513707}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.079594135, y: 0.27187586, z: -0.012856483}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.0008048614
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 6024068860046008016}
+  m_Enabled: 1
 --- !u!1001 &4924790748327068244
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -108,5 +129,10 @@ PrefabInstance:
 --- !u!4 &4887221891637913023 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c931464c368591e4c8c80344a107ff45, type: 3}
+  m_PrefabInstance: {fileID: 4924790748327068244}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6024068860046008016 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: c931464c368591e4c8c80344a107ff45, type: 3}
   m_PrefabInstance: {fileID: 4924790748327068244}
   m_PrefabAsset: {fileID: 0}
