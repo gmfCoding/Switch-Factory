@@ -94,9 +94,11 @@ public class SpawnConveyorExample : MonoBehaviour
     void Start()
     {
         world = Game.instance.world;
+        //CreateConveyor(new Vector2Int(offset.x++, offset.y), Vector2Int.left);
+
         DefaultSetup();
-        TestSmelter();
-        TestAssembler();
+        //TestSmelter();
+        //TestAssembler();
         /*s
         conveyors.Add(world.CreateTileEntity<Conveyor>(new Vector2Int(3, 0)));
         conveyors[1].direction = Vector2Int.up;
