@@ -66,6 +66,7 @@ public class ItemStack : IProvider<ItemStack>
     {
         if (transform != null)
             GameObject.Destroy(transform.gameObject);
+        transform = null;
     }
 
     public void SetInvisible()

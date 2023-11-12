@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9517b923e6b7774680ba1a3db9abb65, type: 3}
+  m_Name: ore_to_crushed
+  m_EditorClassIdentifier: 
+  name: recipe_ore_to_crushed
+  description: 
+  input:
+  - item: {fileID: 11400000, guid: 02cf5ffa2c616414e92cd6093bb492dd, type: 2}
+    amount: 1
+    transform: {fileID: 0}
+  output:
+  - item: {fileID: 11400000, guid: 7728696a4cd37e24692edfa8f2316d7e, type: 2}
+    amount: 1
+    transform: {fileID: 0}
+  time: 0

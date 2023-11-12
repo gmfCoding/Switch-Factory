@@ -51,7 +51,15 @@ public class Game : MonoBehaviour
         AssetInfo[] loaded = Resources.LoadAll<AssetInfo>("");
         foreach (var item in loaded)
         {
-            assets.Add(item.Name, item);
+            try
+            {
+                assets.Add(item.Name, item);
+            }
+            catch (Exception)
+            {
+                Debug.LogError($"{item.Name} already exists as a loaded asset, cause ${item.name}");
+            }
+            
             if (item is SmelterRecipeInfo sri)
                 SmelterRecipeInfo.recipes.Add(sri);
             else if (item is ResourceNodeInfo ri)

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80287d7a36aee0b4192c729c442b54b4, type: 3}
+  m_Name: Press
+  m_EditorClassIdentifier: 
+  name: machine_press
+  description: 
+  model: {fileID: 1262347244074440092, guid: 1ac1e8bf96ab5544c95366f43fc769ed, type: 3}
+  placement: 1
+  directional: 1
+  systemType:
+    m_Name: MachineBase
+    m_AssemblyQualifiedName: 
+    m_AssemblyName: 
+  height: 0
+  span: {x: 1, y: 1}
+  recipes:
+  - {fileID: 11400000, guid: 8c73db5da9e8a744c8ed8e0356426846, type: 2}
+  canConveyorOutput: 1
+  canConveyorInput: 1
+  cost:
+    cost: []
+  buildList: 1

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
@@ -52,5 +53,6 @@ public abstract class TileEntity
     {
         obj = GameObject.Instantiate(this.info.Model);
         TileEntityVisual.SetModelPostion(this.Info, obj.transform, pos);
+        Direction = Vector2Int.right;
     }
 }

@@ -23,11 +23,11 @@ MonoBehaviour:
     m_AssemblyName: 
   height: 0
   span: {x: 1, y: 1}
+  recipes: []
+  canConveyorOutput: 0
+  canConveyorInput: 0
   cost:
-    cost:
-    - item: {fileID: 11400000, guid: 126e91a314829674d9432b34e440c5c7, type: 2}
-      amount: 10
-      transform: {fileID: 0}
+    cost: []
   buildList: 1
   cycle: 40
   capacity: 1

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca6047a97d70cf54abbb4da9064d78f9, type: 3}
   m_Name: iron_ore
   m_EditorClassIdentifier: 
-  name: iron_ore
+  name: item_iron_ore
   description: Smelt in a furnate to get iron plates
   model: {fileID: 3909965223046271843, guid: 523c176e89bdc214c93ad0067b607e71, type: 3}
+  maxStack: 100
