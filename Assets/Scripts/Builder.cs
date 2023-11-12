@@ -11,6 +11,8 @@ public class Builder : MonoBehaviour
 {
     private static Plane xzPlane = new Plane(Vector3.up, Vector3.zero);
 
+    public static Builder instance;
+
     [SerializeField]
     private List<string> placeables;
 
@@ -54,6 +56,10 @@ public class Builder : MonoBehaviour
     public Vector2Int removeTile;
     public bool isRemoving = false;
 
+    public void Awake()
+    {
+        instance = this;
+    }
     public void Start()
     {
         ghost = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -92,6 +98,7 @@ public class Builder : MonoBehaviour
         {
             buildItem.text = selectedInfo.Name;
             ghost = Instantiate(selectedInfo.Model);
+            ghost.transform.SetParent(this.transform);
         }
         var arrow = GameObject.Instantiate(ArrowModel);
         arrow.transform.SetParent(ghost.transform);
@@ -201,6 +208,18 @@ public class Builder : MonoBehaviour
                 rightClickTime = 0.0f;
             }
         }
+    }
+
+    public void OnDisable()
+    {
+        buildItem.gameObject.SetActive(false);
+        tileDetails.gameObject.SetActive(false);
+    }
+
+    public void OnEnable()
+    {
+        buildItem.gameObject.SetActive(true);
+        tileDetails.gameObject.SetActive(true);
     }
 
     public void DebugControls()

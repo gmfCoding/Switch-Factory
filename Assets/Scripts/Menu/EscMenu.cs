@@ -11,6 +11,8 @@ public class EscMenu : MonoBehaviour
 
     public Slider volume;
 
+    public Toggle buildMode;
+
     public void Awake()
     {
         if (PlayerPrefs.HasKey("volume"))
@@ -19,6 +21,11 @@ public class EscMenu : MonoBehaviour
             PlayerPrefs.SetFloat("volume", volume.value);
     }
 
+
+    public void Start()
+    {
+        Builder.instance.gameObject.SetActive(buildMode.isOn);
+    }
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -29,5 +36,10 @@ public class EscMenu : MonoBehaviour
     {
         AudioListener.volume = volume.value;
         PlayerPrefs.SetFloat("volume", volume.value);
+    }
+
+    public void OnBuildModeChanged()
+    {
+        Builder.instance.gameObject.SetActive(buildMode.isOn);
     }
 }
