@@ -11,15 +11,17 @@ public class Patrol : MonoBehaviour
     public float distanceToDestination = 0.2f;
 
     public Transform moveSpot;
+
     public float minX = -9f;
     public float maxX = 9f;
     public float minZ = -9f;
     public float maxZ = 9f;
+    public Transform centerTransform;
 
     private void Start()
     {
         waitTime = startWaitTime;
-        moveSpot.position = new Vector3(Random.Range(minX, maxX), 0, Random.Range(minZ, maxZ));//having the y at 0 insures the move spot doent underground
+        moveSpot.position = new Vector3(Random.Range(centerTransform.position.x + minX, centerTransform.position.x + maxX), 0, Random.Range(centerTransform.position.z + minZ, centerTransform.position.z + maxZ));//having the y at 0 insures the move spot doent underground
         //moveSpot.position = new Vector3(Random.Range(minX, maxX), this.transform.position.y, Random.Range(minZ, maxZ));
 
     }
@@ -32,7 +34,7 @@ public class Patrol : MonoBehaviour
             if (waitTime <= 0)
             {
                 //moveSpot.position = new Vector3(Random.Range(minX, maxX), this.transform.position.y, Random.Range(minZ, maxZ));
-                moveSpot.position = new Vector3(Random.Range(minX, maxX), 0, Random.Range(minZ, maxZ));
+                moveSpot.position = new Vector3(Random.Range(centerTransform.position.x + minX, centerTransform.position.x + maxX), 0, Random.Range(centerTransform.position.z + minZ, centerTransform.position.z + maxZ));
                 waitTime = startWaitTime;
             }
             else
